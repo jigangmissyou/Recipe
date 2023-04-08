@@ -1,36 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    >
-    <ImageView
-        android:id="@+id/courseImage"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:padding="8dp"
-        android:src="@drawable/ic_launcher_background"
-        />
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center"
-        >
+    android:padding="16dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- Picture on the left -->
+        <ImageView
+            android:id="@+id/content_image_view"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentStart="true"
+            android:scaleType="centerCrop"/>
+
+        <!-- Title -->
         <TextView
-            android:id="@+id/courseName"
+            android:id="@+id/content_title_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/content_image_view"
+            android:layout_marginStart="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Short description -->
+        <TextView
+            android:id="@+id/content_description_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content_title_text_view"
+            android:layout_toEndOf="@id/content_image_view"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
+            android:textSize="16sp"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Thumb up icon -->
+        <ImageView
+            android:id="@+id/thumb_up_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Course Name"
-            />
-        <TextView
-            android:id="@+id/courseDescription"
+            android:src="@drawable/ic_thumb_up"
+            android:layout_below="@id/content_description_text_view"
+            android:layout_toEndOf="@id/content_image_view"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"/>
+
+        <!-- Collect icon -->
+        <ImageView
+            android:id="@+id/collect_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Course Description"
-            />
-    </LinearLayout>
+            android:src="@drawable/ic_collect"
+            android:layout_below="@id/content_description_text_view"
+            android:layout_toEndOf="@id/thumb_up_icon"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"/>
+
+    </RelativeLayout>
+
 </LinearLayout>

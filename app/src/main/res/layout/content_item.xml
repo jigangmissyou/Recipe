@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:layout_height="wrap_content">
 
         <!-- Picture on the left -->
         <ImageView
@@ -23,7 +23,8 @@
             android:layout_toEndOf="@id/content_image_view"
             android:layout_marginStart="16dp"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
 
         <!-- Short description -->
         <TextView
@@ -34,14 +35,15 @@
             android:layout_toEndOf="@id/content_image_view"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
-            android:textSize="14sp"/>
+            android:textSize="3sp"
+            android:layout_marginBottom="16dp"/>
 
         <!-- Thumb up icon -->
         <ImageView
             android:id="@+id/thumb_up_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_search"
+            android:src="@drawable/ic_thumb_up"
             android:layout_below="@id/content_description_text_view"
             android:layout_toEndOf="@id/content_image_view"
             android:layout_marginTop="8dp"
@@ -52,7 +54,7 @@
             android:id="@+id/collect_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_search"
+            android:src="@drawable/ic_collect"
             android:layout_below="@id/content_description_text_view"
             android:layout_toEndOf="@id/thumb_up_icon"
             android:layout_marginTop="8dp"

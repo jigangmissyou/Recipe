@@ -60,9 +60,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
         // set the image
         holder.images.setImageResource(image);
         // set the title
-        holder.text.setText(title);
+        holder.title.setText(title);
         // set the description
-        holder.text.setText(description);
+        holder.description.setText(description);
+        // according to boolean value, show or hide the icon
+//        if (contentItem.isThumbUp()) {
+//            holder.thumb_up_icon.setVisibility(View.VISIBLE);
+//        } else {
+//            holder.thumb_up_icon.setVisibility(View.GONE);
+//        }
 
 ////        int image = this.contentItems.get(position);
 //        holder.images.setImageResource(image);
@@ -80,15 +86,22 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
 
 
         public ImageView images;
-        public TextView text;
+        public TextView title;
+
+        // add the icon
+        public ImageView thumb_up_icon;
+
+        public ImageView collect_icon;
 
         public TextView description;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            images = itemView.findViewById(R.id.courseImage);
-            text = itemView.findViewById(R.id.courseName);
-            description = itemView.findViewById(R.id.courseDescription);
+            images = itemView.findViewById(R.id.content_image_view);
+            title = itemView.findViewById(R.id.content_title_text_view);
+            description = itemView.findViewById(R.id.content_description_text_view);
+//            thumb_up_icon = itemView.findViewById(R.id.thumb_up_icon);
+//            collect_icon = itemView.findViewById(R.id.collect_icon);
         }
     }
 }
