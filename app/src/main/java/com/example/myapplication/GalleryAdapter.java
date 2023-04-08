@@ -12,10 +12,16 @@ import java.util.List;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
+    public interface OnItemClickListener {
+        void onItemClick(int position);
+    }
     private List<Integer> images;
+    private static OnItemClickListener listener;
 
-    public GalleryAdapter(List<Integer> images) {
+
+    public GalleryAdapter(List<Integer> images, OnItemClickListener listener) {
         this.images = images;
+        this.listener = listener;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -24,6 +30,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.image);
+            image.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
+                    }
+                }
+            });
         }
     }
 
@@ -36,7 +51,6 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         int imageRes = images.get(position);
-//        holder.image.setImageResource(imageRes);
         holder.image.setImageResource(imageRes);
     }
 
