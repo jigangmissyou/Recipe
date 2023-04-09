@@ -1,8 +1,10 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +26,7 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
         showGallery();
         showContentList();
         showBottomNav();
+        layoutTab();
     }
 
     @Override
@@ -104,5 +108,36 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
             }
 
         });
+    }
+
+    public void layoutTab(){
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        // Handle click on first tab item
+                        Toast.makeText(DashboardActivity.this, "Tab 1", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        // Handle click on second tab item
+                        Toast.makeText(DashboardActivity.this, "Tab 2", Toast.LENGTH_SHORT).show();
+                        // navigate to category activity
+                        Intent intent = new Intent(DashboardActivity.this, CategoryActivity.class);
+                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {}
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {}
+        });
+
     }
 }
