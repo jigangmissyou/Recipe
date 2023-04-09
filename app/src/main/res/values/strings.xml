@@ -6,4 +6,8 @@
     <string name="tab_recommend">Recommend</string>
     <string name="tab_category">Category</string>
     <string name="search_hint">Keywords</string>
+    <string name="menu_item_1_title">Home</string>
+    <string name="menu_item_2_title">Add New</string>
+    <string name="menu_item_3_title">Message</string>
+    <string name="menu_item_4_title">Profile</string>
 </resources>
