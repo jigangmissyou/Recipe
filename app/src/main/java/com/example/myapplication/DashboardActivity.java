@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,7 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
         showContentList();
         showBottomNav();
         layoutTab();
+        search();
     }
 
     @Override
@@ -159,5 +162,27 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
             public void onTabReselected(TabLayout.Tab tab) {}
         });
 
+    }
+
+    public void search(){
+        // Get a reference to the SearchView
+        SearchView searchView = findViewById(R.id.search_view);
+        // Set up a listener for when the user submits a search query
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Handle the user's search query here
+                // Perform a search using the query string and display the results
+                Toast.makeText(DashboardActivity.this, "Search: submit " + query, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // Handle any changes to the user's search query here
+                // Update the search results as the user types
+                Toast.makeText(DashboardActivity.this, "Search: change" + newText, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
     }
 }

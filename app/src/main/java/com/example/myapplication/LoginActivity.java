@@ -56,9 +56,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean authenticateUser(String email, String password) {
-        // You can write the code to authenticate user against a database or web service here.
-        // For example, you can make an HTTP request to a web service and check the response.
-        // For the purpose of this example, we are hard-coding a user's email and password.
+       // demo user credentials
         return email.equals("demo@example.com") && password.equals("password123");
     }
 }
