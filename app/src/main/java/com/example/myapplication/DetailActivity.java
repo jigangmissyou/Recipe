@@ -2,6 +2,8 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -31,6 +33,7 @@ public class DetailActivity extends AppCompatActivity {
 //      Glide.with(this).load(recipe.getBannerImageUrl()).into(bannerImageView);
         titleTextView.setText(recipe.getTitle());
         nicknameTextView.setText(recipe.getNickName());
+        shareRecipe();
         // Abandoned code
 //        for (RecipeStep step : recipe.getRecipeSteps()) {
 //            View stepView = LayoutInflater.from(this).inflate(R.layout.recipe_step, stepsLayout, false);
@@ -41,6 +44,28 @@ public class DetailActivity extends AppCompatActivity {
 //            stepTextView.setText(step.getDescription());
 //            stepsLayout.addView(stepView);
 //        }
+
+    }
+
+    // share recipe
+    public void shareRecipe() {
+        ImageButton shareButton = findViewById(R.id.share_button);
+        // add listener to share button
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = getIntent();
+                ContentItem recipe = (ContentItem) intent.getSerializableExtra("item");
+                String shareText = "Check out this recipe: " + recipe.getTitle() + " by " + recipe.getNickName();
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText);
+                Intent chooser = Intent.createChooser(shareIntent, "Share this recipe");
+                if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(chooser);
+                }
+            }
+        });
 
     }
 

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -74,8 +75,8 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
             images = itemView.findViewById(R.id.content_image_view);
             title = itemView.findViewById(R.id.content_title_text_view);
             description = itemView.findViewById(R.id.content_description_text_view);
-//            thumb_up_icon = itemView.findViewById(R.id.thumb_up_icon);
-//            collect_icon = itemView.findViewById(R.id.collect_icon);
+            thumb_up_icon = itemView.findViewById(R.id.thumb_up_button);
+            collect_icon = itemView.findViewById(R.id.collect_button);
             images.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -85,6 +86,30 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
                         if (position != RecyclerView.NO_POSITION) {
                             ContentItem item = contentItems.get(position);
                             onItemClickListener.onItemClick(item);
+                        }
+                    }
+                }
+            });
+            thumb_up_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Toast.makeText(context, "Thumb up", Toast.LENGTH_SHORT).show();
+//                            ContentItem item = contentItems.get(position);
+//                            onItemClickListener.onItemClick(item);
+                        }
+                    }
+                }
+            });
+            collect_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (onItemClickListener != null) {
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Toast.makeText(context, "Collected", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

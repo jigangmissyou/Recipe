@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -84,6 +85,9 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 // TODO: Send the registration data to the server for processing
                 Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                // navigate to the skip activity
+                Intent intent = new Intent(RegisterActivity.this, DashboardActivity.class);
+                startActivity(intent);
             }
         });
     }
