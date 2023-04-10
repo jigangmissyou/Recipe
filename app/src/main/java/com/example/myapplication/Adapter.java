@@ -1,11 +1,13 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,31 +16,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
-    ImageView images;
+    ImageView image;
     TextView text;
-//    List image, title, description;
-//    ContentItem contentItem;
-    // how to pass in a list of ContentItem objects?
     List<ContentItem> contentItems;
-
     Context context;
-//    ArrayList title;
-//    String description;
-//    int image;
+    private Adapter.onItemClickListener onItemClickListener;
 
-    // data is passed into the constructor
     public Adapter(Context context, List<ContentItem> contentItem) {
         this.context = context;
         this.contentItems = contentItem;
     }
 
+    public interface onItemClickListener {
+        void onItemClick(ContentItem item);
+    }
 
-//    public Adapter2(Context context, ArrayList courseImag, ArrayList courseName) {
-//        this.context = context;
-//        this.courseImag = courseImag;
-//        this.courseName = courseName;
-//    }
-
+    public void setOnItemClickListener(onItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -63,31 +58,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
         holder.title.setText(title);
         // set the description
         holder.description.setText(description);
-        // according to boolean value, show or hide the icon
-//        if (contentItem.isThumbUp()) {
-//            holder.thumb_up_icon.setVisibility(View.VISIBLE);
-//        } else {
-//            holder.thumb_up_icon.setVisibility(View.GONE);
-//        }
-
-////        int image = this.contentItems.get(position);
-//        holder.images.setImageResource(image);
-//        holder.text.setText((CharSequence) this.contentItem.getTitle());
-//        holder.text.setText((CharSequence) this.contentItem.getDescription());
     }
 
     @Override
     public int getItemCount() {
         return contentItems.size();
     }
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-
         public ImageView images;
         public TextView title;
-
         // add the icon
         public ImageView thumb_up_icon;
 
@@ -95,13 +74,26 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
 
         public TextView description;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
             images = itemView.findViewById(R.id.content_image_view);
             title = itemView.findViewById(R.id.content_title_text_view);
             description = itemView.findViewById(R.id.content_description_text_view);
 //            thumb_up_icon = itemView.findViewById(R.id.thumb_up_icon);
 //            collect_icon = itemView.findViewById(R.id.collect_icon);
+            images.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//
+                    if (onItemClickListener != null) {
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            ContentItem item = contentItems.get(position);
+                            onItemClickListener.onItemClick(item);
+                        }
+                    }
+                }
+            });
         }
     }
 }
