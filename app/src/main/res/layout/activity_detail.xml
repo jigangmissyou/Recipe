@@ -69,30 +69,11 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"/>
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipe_step_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginTop="16dp"
-            android:id="@+id/recipe_steps"
-            >
-                <ImageView
-                    android:id="@+id/step1_image"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/pic3" />
-                <TextView
-                    android:id="@+id/step1_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Step 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas auctor, velit eget hendrerit tincidunt, sapien risus volutpat nisl, eget congue risus libero a enim. Sed volutpat, libero quis consectetur pharetra, nisi massa tristique urna, eget varius tellus magna a lectus. Integer tempor odio quis mi pretium, id finibus neque malesuada. Aenean non ultricies eros. "
-                    android:textSize="16sp"
-                    />
-        </LinearLayout>
+            />
 
         <!-- Steps Images -->
-
-
-
         </LinearLayout>

@@ -53,7 +53,6 @@ public class ContentItem implements Serializable {
         return mRecipeSteps;
     }
 
-
     public boolean isThumbUp() {
         return mThumbUp;
     }
