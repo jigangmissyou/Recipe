@@ -22,20 +22,10 @@ public class DetailActivity extends AppCompatActivity {
         TextView nicknameTextView = findViewById(R.id.recipe_author);
 //        LinearLayout ingredientsLayout = findViewById(R.id.recipe_ingredients);
         LinearLayout stepsLayout = findViewById(R.id.recipe_steps);
-
         // set recipe data to views
 //      Glide.with(this).load(recipe.getBannerImageUrl()).into(bannerImageView);
         titleTextView.setText(recipe.getTitle());
         nicknameTextView.setText(recipe.getNickName());
-
-//        for (String ingredient : recipe.getIngredients()) {
-//            View ingredientView = LayoutInflater.from(this).inflate(R.layout.item_ingredient, ingredientsLayout, false);
-//            ImageView ingredientImageView = ingredientView.findViewById(R.id.ingredientImageView);
-//            TextView ingredientTextView = ingredientView.findViewById(R.id.ingredientTextView);
-//            ingredientTextView.setText(ingredient);
-//            ingredientsLayout.addView(ingredientView);
-//        }
-
         for (RecipeStep step : recipe.getRecipeSteps()) {
             View stepView = LayoutInflater.from(this).inflate(R.layout.recipe_step, stepsLayout, false);
             ImageView stepImageView = stepView.findViewById(R.id.step1_image);
@@ -45,10 +35,6 @@ public class DetailActivity extends AppCompatActivity {
             stepTextView.setText(step.getDescription());
             stepsLayout.addView(stepView);
         }
-
-
-
-        // Use the item object in your activity as needed
 
     }
 

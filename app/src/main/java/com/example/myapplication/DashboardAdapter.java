@@ -1,28 +1,25 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder>{
+public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.ViewHolder>{
     ImageView image;
     TextView text;
     List<ContentItem> contentItems;
     Context context;
-    private Adapter.onItemClickListener onItemClickListener;
+    private DashboardAdapter.onItemClickListener onItemClickListener;
 
-    public Adapter(Context context, List<ContentItem> contentItem) {
+    public DashboardAdapter(Context context, List<ContentItem> contentItem) {
         this.context = context;
         this.contentItems = contentItem;
     }

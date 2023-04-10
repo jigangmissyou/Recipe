@@ -81,12 +81,12 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
                 new ContentItem(R.drawable.pic2, "Title 20", "Description 20", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
                 new ContentItem(R.drawable.pic2, "Title 21", "Description 21", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps)
         );
-        Adapter adapter2 = new Adapter(this, contentItems);
+        DashboardAdapter adapter2 = new DashboardAdapter(this, contentItems);
         RecyclerView contentRecyclerView = findViewById(R.id.content_item_layout);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this);
         contentRecyclerView.setLayoutManager(layoutManager2);
         contentRecyclerView.setAdapter(adapter2);
-        adapter2.setOnItemClickListener(new Adapter.onItemClickListener() {
+        adapter2.setOnItemClickListener(new DashboardAdapter.onItemClickListener() {
             @Override
             public void onItemClick(ContentItem item) {
                 // Navigate to the detail activity
@@ -99,6 +99,9 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
         });
     }
 
+    /**
+     * Show bottom navigation bar
+     */
     public void showBottomNav() {
         // show bottom navigation, but don't do anything when a menu item is clicked
 
@@ -124,6 +127,9 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
         });
     }
 
+    /**
+     * Show top navigation bar
+     */
     public void layoutTab(){
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
