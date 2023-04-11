@@ -12,14 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.ViewHolder>{
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     ImageView image;
     TextView text;
     List<Recipe> recipes;
     Context context;
-    private DashboardAdapter.onItemClickListener onItemClickListener;
+    private HomeAdapter.onItemClickListener onItemClickListener;
 
-    public DashboardAdapter(Context context, List<Recipe> recipe) {
+    public HomeAdapter(Context context, List<Recipe> recipe) {
         this.context = context;
         this.recipes = recipe;
     }

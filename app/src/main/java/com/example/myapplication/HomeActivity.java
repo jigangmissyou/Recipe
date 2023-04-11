@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class DashboardActivity extends AppCompatActivity implements GalleryAdapter.OnItemClickListener {
+public class HomeActivity extends AppCompatActivity implements GalleryAdapter.OnItemClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +56,6 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
      * Show a vertical list of content items
      */
     public void showContentList() {
-        // last parameter is an array of strings
         ArrayList<RecipeStep> recipeSteps = new ArrayList<>();
         recipeSteps.add(new RecipeStep("Step 1", R.drawable.pic1));
         recipeSteps.add(new RecipeStep("Step 2", R.drawable.pic2));
@@ -83,16 +82,16 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
                 new Recipe(R.drawable.pic2, "Title 20", "Description 20", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
                 new Recipe(R.drawable.pic2, "Title 21", "Description 21", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps)
         );
-        DashboardAdapter adapter2 = new DashboardAdapter(this, recipes);
+        HomeAdapter adapter2 = new HomeAdapter(this, recipes);
         RecyclerView contentRecyclerView = findViewById(R.id.content_item_layout);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this);
         contentRecyclerView.setLayoutManager(layoutManager2);
         contentRecyclerView.setAdapter(adapter2);
-        adapter2.setOnItemClickListener(new DashboardAdapter.onItemClickListener() {
+        adapter2.setOnItemClickListener(new HomeAdapter.onItemClickListener() {
             @Override
             public void onItemClick(Recipe item) {
                 // Navigate to the detail activity
-                Intent intent = new Intent(DashboardActivity.this, DetailActivity.class);
+                Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
                 intent.putExtra("item", item);
                 Log.d("ITEM", "Title: " + item.getTitle());
                 Log.d("ITEM", "Description: " + item.getDescription());
@@ -117,17 +116,17 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
                         return true;
                     case R.id.menu_item_2:
                         //Navigate to recipe add activity
-                        Intent intent = new Intent(DashboardActivity.this, RecipeAddActivity.class);
+                        Intent intent = new Intent(HomeActivity.this, RecipeAddActivity.class);
                         startActivity(intent);
                         return true;
                     case R.id.menu_item_3:
-                        Toast.makeText(DashboardActivity.this, "Please wait to release :)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "Please wait to release :)", Toast.LENGTH_SHORT).show();
                         // TODO IF USER IS NOT LOGGED IN, NAVIGATE TO LOGIN ACTIVITY
                         return true;
                     case R.id.menu_item_4:
                         // TODO IF USER IS NOT LOGGED IN, NAVIGATE TO LOGIN ACTIVITY
                         // Navigate to the profile activity
-                        Intent intent2 = new Intent(DashboardActivity.this, ProfileActivity.class);
+                        Intent intent2 = new Intent(HomeActivity.this, ProfileActivity.class);
                         startActivity(intent2);
                         return true;
                     default:
@@ -149,13 +148,13 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
                 switch (tab.getPosition()) {
                     case 0:
                         // Handle click on first tab item
-                        Toast.makeText(DashboardActivity.this, "Tab 1", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "Tab 1", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
                         // Handle click on second tab item
-                        Toast.makeText(DashboardActivity.this, "Tab 2", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(HomeActivity.this, "Tab 2", Toast.LENGTH_SHORT).show();
                         // navigate to category activity
-                        Intent intent = new Intent(DashboardActivity.this, CategoryActivity.class);
+                        Intent intent = new Intent(HomeActivity.this, CategoryActivity.class);
                         startActivity(intent);
                         break;
                     default:
@@ -180,13 +179,13 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
             @Override
             public boolean onQueryTextSubmit(String query) {
                 // TODO WILL BE IMPLEMENTED IN THE FUTURE
-                Toast.makeText(DashboardActivity.this, "Search: submit " + query, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Search: submit " + query, Toast.LENGTH_SHORT).show();
                 return true;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
                 // TODO WILL BE IMPLEMENTED IN THE FUTURE
-                Toast.makeText(DashboardActivity.this, "Search: change" + newText, Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "Search: change" + newText, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });
