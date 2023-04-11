@@ -15,17 +15,17 @@ import java.util.List;
 public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.ViewHolder>{
     ImageView image;
     TextView text;
-    List<ContentItem> contentItems;
+    List<Recipe> recipes;
     Context context;
     private DashboardAdapter.onItemClickListener onItemClickListener;
 
-    public DashboardAdapter(Context context, List<ContentItem> contentItem) {
+    public DashboardAdapter(Context context, List<Recipe> recipe) {
         this.context = context;
-        this.contentItems = contentItem;
+        this.recipes = recipe;
     }
 
     public interface onItemClickListener {
-        void onItemClick(ContentItem item);
+        void onItemClick(Recipe item);
     }
 
     public void setOnItemClickListener(onItemClickListener listener) {
@@ -41,13 +41,13 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         // define the data to be displayed
-        ContentItem contentItem = contentItems.get(position);
+        Recipe recipe = recipes.get(position);
         // get the image from the ContentItem object
-        int image = contentItem.getImageResId();
+        int image = recipe.getImageResId();
         // get the title from the ContentItem object
-        String title = contentItem.getTitle();
+        String title = recipe.getTitle();
         // get the description from the ContentItem object
-        String description = contentItem.getDescription();
+        String description = recipe.getDescription();
         // set the image
         holder.images.setImageResource(image);
         // set the title
@@ -58,7 +58,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
 
     @Override
     public int getItemCount() {
-        return contentItems.size();
+        return recipes.size();
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView images;
@@ -84,7 +84,7 @@ public class DashboardAdapter extends RecyclerView.Adapter<DashboardAdapter.View
                     if (onItemClickListener != null) {
                         int position = getBindingAdapterPosition();
                         if (position != RecyclerView.NO_POSITION) {
-                            ContentItem item = contentItems.get(position);
+                            Recipe item = recipes.get(position);
                             onItemClickListener.onItemClick(item);
                         }
                     }

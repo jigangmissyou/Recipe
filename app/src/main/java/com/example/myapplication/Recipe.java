@@ -1,25 +1,62 @@
 package com.example.myapplication;
 
-public class Recipe {
-    private String name;
-    private String[] ingredients;
-    private String[] steps;
+import java.io.Serializable;
+import java.util.ArrayList;
 
-    public Recipe(String name, String[] ingredients, String[] steps) {
-        this.name = name;
-        this.ingredients = ingredients;
-        this.steps = steps;
+public class Recipe implements Serializable {
+    private int mImageResId;
+    private String mTitle;
+    private String mDescription;
+    private boolean mThumbUp;
+    private boolean mCollected;
+    private String mNickName;
+
+    // define field ingredients
+    private String[] mIngredients;
+
+    private ArrayList<RecipeStep> mRecipeSteps;
+
+//    private List
+
+    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
+        mImageResId = imageResId;
+        mTitle = title;
+        mDescription = description;
+        mThumbUp = thumbUp;
+        mCollected = collected;
+        mNickName = nickName;
+        mIngredients = ingredients;
+        mRecipeSteps = recipeSteps;
+    }
+    public int getImageResId() {
+        return mImageResId;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public String getNickName() {
+        return mNickName;
     }
 
     public String[] getIngredients() {
-        return ingredients;
+        return mIngredients;
     }
 
-    public String[] getSteps() {
-        return steps;
+    public ArrayList<RecipeStep> getRecipeSteps() {
+        return mRecipeSteps;
+    }
+
+    public boolean isThumbUp() {
+        return mThumbUp;
+    }
+
+    public boolean isCollected() {
+        return mCollected;
     }
 }

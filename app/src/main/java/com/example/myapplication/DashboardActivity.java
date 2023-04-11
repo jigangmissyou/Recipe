@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -61,37 +60,37 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
         ArrayList<RecipeStep> recipeSteps = new ArrayList<>();
         recipeSteps.add(new RecipeStep("Step 1", R.drawable.pic1));
         recipeSteps.add(new RecipeStep("Step 2", R.drawable.pic2));
-        List<ContentItem> contentItems = Arrays.asList(
-                new ContentItem(R.drawable.pic2, "Title 1", "Description 1", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 2", "Description 2", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 3", "Description 3", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 4", "Description 4", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 5", "Description 5", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 6", "Description 6", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 7", "Description 7", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 8", "Description 8", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 9", "Description 9", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 10", "Description 10", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 11", "Description 11", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 12", "Description 12", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 13", "Description 13", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 14", "Description 14", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 15", "Description 15", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 16", "Description 16", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 17", "Description 17", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 18", "Description 18", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 19", "Description 19", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 20", "Description 20", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
-                new ContentItem(R.drawable.pic2, "Title 21", "Description 21", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps)
+        List<Recipe> recipes = Arrays.asList(
+                new Recipe(R.drawable.pic2, "Title 1", "Description 1", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 2", "Description 2", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 3", "Description 3", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 4", "Description 4", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 5", "Description 5", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 6", "Description 6", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 7", "Description 7", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 8", "Description 8", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 9", "Description 9", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 10", "Description 10", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 11", "Description 11", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 12", "Description 12", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 13", "Description 13", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 14", "Description 14", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 15", "Description 15", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 16", "Description 16", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 17", "Description 17", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 18", "Description 18", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 19", "Description 19", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 20", "Description 20", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
+                new Recipe(R.drawable.pic2, "Title 21", "Description 21", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps)
         );
-        DashboardAdapter adapter2 = new DashboardAdapter(this, contentItems);
+        DashboardAdapter adapter2 = new DashboardAdapter(this, recipes);
         RecyclerView contentRecyclerView = findViewById(R.id.content_item_layout);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this);
         contentRecyclerView.setLayoutManager(layoutManager2);
         contentRecyclerView.setAdapter(adapter2);
         adapter2.setOnItemClickListener(new DashboardAdapter.onItemClickListener() {
             @Override
-            public void onItemClick(ContentItem item) {
+            public void onItemClick(Recipe item) {
                 // Navigate to the detail activity
                 Intent intent = new Intent(DashboardActivity.this, DetailActivity.class);
                 intent.putExtra("item", item);

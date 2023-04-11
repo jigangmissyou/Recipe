@@ -17,7 +17,7 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
         Intent intent = getIntent();
         // retrieve recipe from intent
-        ContentItem recipe = (ContentItem) intent.getSerializableExtra("item");
+        Recipe recipe = (Recipe) intent.getSerializableExtra("item");
         // bind views
         ImageView bannerImageView = findViewById(R.id.banner_image);
         TextView titleTextView = findViewById(R.id.recipe_title);
@@ -55,7 +55,7 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = getIntent();
-                ContentItem recipe = (ContentItem) intent.getSerializableExtra("item");
+                Recipe recipe = (Recipe) intent.getSerializableExtra("item");
                 String shareText = "Check out this recipe: " + recipe.getTitle() + " by " + recipe.getNickName();
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");

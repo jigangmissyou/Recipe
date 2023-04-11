@@ -13,10 +13,10 @@ import java.util.List;
 
 public class ContentListAdapter extends RecyclerView.Adapter<ContentListAdapter.ViewHolder> {
 
-    private List<ContentItem> mContentItems;
+    private List<Recipe> mRecipes;
 
-    public ContentListAdapter(List<ContentItem> contentItems) {
-        mContentItems = contentItems;
+    public ContentListAdapter(List<Recipe> recipes) {
+        mRecipes = recipes;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -37,10 +37,10 @@ public class ContentListAdapter extends RecyclerView.Adapter<ContentListAdapter.
 //            mCollectImageView = view.findViewById(R.id.content_collect_image_view);
         }
 
-        public void bind(ContentItem contentItem) {
-            mImageView.setImageResource(contentItem.getImageResId());
-            mTitleTextView.setText(contentItem.getTitle());
-            mDescriptionTextView.setText(contentItem.getDescription());
+        public void bind(Recipe recipe) {
+            mImageView.setImageResource(recipe.getImageResId());
+            mTitleTextView.setText(recipe.getTitle());
+            mDescriptionTextView.setText(recipe.getDescription());
 //            mThumbUpImageView.setImageResource(contentItem.isThumbUp() ? R.drawable.ic_thumb_up_selected : R.drawable.ic_thumb_up);
 //            mCollectImageView.setImageResource(contentItem.isCollected() ? R.drawable.ic_collect_selected : R.drawable.ic_collect);
         }
@@ -56,10 +56,10 @@ public class ContentListAdapter extends RecyclerView.Adapter<ContentListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ContentItem contentItem = mContentItems.get(position);
-        holder.mImageView.setImageResource(contentItem.getImageResId());
-        holder.mTitleTextView.setText(contentItem.getTitle());
-        holder.mDescriptionTextView.setText(contentItem.getDescription());
+        Recipe recipe = mRecipes.get(position);
+        holder.mImageView.setImageResource(recipe.getImageResId());
+        holder.mTitleTextView.setText(recipe.getTitle());
+        holder.mDescriptionTextView.setText(recipe.getDescription());
 //        holder.mThumbUpImageView.setImageResource(contentItem.isThumbUp() ? R.drawable.ic_thumb_up_selected : R.drawable.ic_thumb_up);
 //        holder.mCollectImageView.setImageResource(contentItem.isCollected() ? R.drawable.ic_collect_selected : R.drawable.ic_collect);
 
@@ -68,7 +68,7 @@ public class ContentListAdapter extends RecyclerView.Adapter<ContentListAdapter.
 
     @Override
     public int getItemCount() {
-        return mContentItems.size();
+        return mRecipes.size();
     }
 }
 
