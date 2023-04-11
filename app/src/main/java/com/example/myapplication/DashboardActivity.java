@@ -117,10 +117,19 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
                         // Handle menu item 1 click
                         return true;
                     case R.id.menu_item_2:
-                        // Handle menu item 2 click
+                        //Navigate to recipe add activity
+                        Intent intent = new Intent(DashboardActivity.this, RecipeAddActivity.class);
+                        startActivity(intent);
                         return true;
                     case R.id.menu_item_3:
-                        // Handle menu item 3 click
+                        Toast.makeText(DashboardActivity.this, "Please wait to release :)", Toast.LENGTH_SHORT).show();
+                        // TODO IF USER IS NOT LOGGED IN, NAVIGATE TO LOGIN ACTIVITY
+                        return true;
+                    case R.id.menu_item_4:
+                        // TODO IF USER IS NOT LOGGED IN, NAVIGATE TO LOGIN ACTIVITY
+                        // Navigate to the profile activity
+                        Intent intent2 = new Intent(DashboardActivity.this, ProfileActivity.class);
+                        startActivity(intent2);
                         return true;
                     default:
                         return false;
@@ -171,15 +180,13 @@ public class DashboardActivity extends AppCompatActivity implements GalleryAdapt
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Handle the user's search query here
-                // Perform a search using the query string and display the results
+                // TODO WILL BE IMPLEMENTED IN THE FUTURE
                 Toast.makeText(DashboardActivity.this, "Search: submit " + query, Toast.LENGTH_SHORT).show();
                 return true;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Handle any changes to the user's search query here
-                // Update the search results as the user types
+                // TODO WILL BE IMPLEMENTED IN THE FUTURE
                 Toast.makeText(DashboardActivity.this, "Search: change" + newText, Toast.LENGTH_SHORT).show();
                 return true;
             }
