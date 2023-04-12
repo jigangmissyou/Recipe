@@ -1,11 +1,14 @@
 package com.example.myapplication;
 
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,11 +86,29 @@ public class RegisterActivity extends AppCompatActivity {
                     passwordEditText.requestFocus();
                     return;
                 }
+                // show a dialog to notice user that the registration is in progress
+                Context thisContext = RegisterActivity.this;
+                Dialog dialog = new Dialog(thisContext);
+                dialog.setContentView(R.layout.activity_dialog);
+//                dialog.setCancelable(yes); // Prevent the user from closing the dialog
+                TextView textMsgView = dialog.findViewById(R.id.dialog_message);
+                textMsgView.setText("Registration successful!");
+                dialog.show();
+                Button okButton = dialog.findViewById(R.id.dialog_ok_button);
+                okButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                        // navigate to the skip activity
+                        Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+
                 // TODO: Send the registration data to the server for processing
-                Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
-                // navigate to the skip activity
-                Intent intent = new Intent(RegisterActivity.this, HomeActivity.class);
-                startActivity(intent);
+//                Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
