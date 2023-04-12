@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private boolean authenticateUser(String email, String password) {
        // demo user credentials
-        return email.equals("demo@example.com") && password.equals("password123");
+        return email.equals("demo@demo.com") && password.equals("123456");
     }
 }
 
