@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
         List<Recipe> recipes = Arrays.asList(
                 new Recipe(R.drawable.pic16, "How to cook a festive gammon", "Traditionally served on Boxing Day, glistening gammon is a Christmas classic.", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
                 new Recipe(R.drawable.pic26, "How to cook a roast shoulder of lamb", "A shoulder of lamb is an Easter classic. Let's do it!", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps2),
-                new Recipe(R.drawable.pic37, "How to make a Christmas terrine", "Description 3", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps3)
+                new Recipe(R.drawable.pic37, "How to make a Christmas terrine", "A game terrine is an impressive centrepiece that can be made ahead for a festive buffet or dinner party starter", false, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps3)
 //                new Recipe(R.drawable.pic2, "Title 4", "Description 4", false, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
 //                new Recipe(R.drawable.pic2, "Title 5", "Description 5", true, true, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
 //                new Recipe(R.drawable.pic2, "Title 6", "Description 6", true, false, "Jigang", new String[]{"Tag 1", "Tag 2", "Tag 3"}, recipeSteps),
