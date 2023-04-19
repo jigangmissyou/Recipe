@@ -33,6 +33,7 @@ public class DetailActivity extends AppCompatActivity {
 //      Glide.with(this).load(recipe.getBannerImageUrl()).into(bannerImageView);
         titleTextView.setText(recipe.getTitle());
         nicknameTextView.setText(recipe.getNickName());
+        bannerImageView.setImageResource(recipe.getImageResId());
         shareRecipe();
         // Abandoned code
 //        for (RecipeStep step : recipe.getRecipeSteps()) {
