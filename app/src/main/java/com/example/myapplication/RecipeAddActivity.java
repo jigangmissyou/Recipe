@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -23,13 +26,19 @@ public class RecipeAddActivity extends AppCompatActivity {
     private EditText mEditTextRecipeDescription;
     private Button mButtonAddRecipe;
     private Button buttonAddIngredient;
-    private Button buttonAddStep;
+//    private Button buttonAddStep;
 
     private Button buttonDelIngredient;
 
     private Button buttonDelStep;
     private int mIngredientCount = 1;
     private int mStepCount = 1;
+
+    private LinearLayout layoutPictureUpload;
+    private int stepCount = 1;
+
+    private List<View> pictureUploadViews = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +52,18 @@ public class RecipeAddActivity extends AppCompatActivity {
         mLayoutRecipeSteps = findViewById(R.id.layout_recipe_steps);
         mButtonAddRecipe = findViewById(R.id.button_add_recipe);
         buttonAddIngredient = findViewById(R.id.button_add_ingredient);
-        buttonAddStep = findViewById(R.id.button_add_step);
+//        buttonAddStep = findViewById(R.id.button_add_step);
         buttonDelIngredient = findViewById(R.id.button_del_ingredient);
         buttonDelStep = findViewById(R.id.button_del_step);
+
+        layoutPictureUpload = findViewById(R.id.layout_picture_upload);
+        Button buttonAddStep = findViewById(R.id.button_add_step);
+        buttonAddStep.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addPictureUploadView();
+            }
+        });
 
         // Set click listener for add recipe button
         mButtonAddRecipe.setOnClickListener(new View.OnClickListener() {
@@ -62,12 +80,12 @@ public class RecipeAddActivity extends AppCompatActivity {
             }
         });
 
-        buttonAddStep.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addStepField();
-            }
-        });
+//        buttonAddStep.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                addStepField();
+//            }
+//        });
 
 //        buttonDelIngredient.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -79,7 +97,7 @@ public class RecipeAddActivity extends AppCompatActivity {
         buttonDelStep.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteStepField();
+                deletePictureUploadView();
             }
         });
 
@@ -315,7 +333,70 @@ public class RecipeAddActivity extends AppCompatActivity {
 //        mIngredientCount--;
     }
 
+    private void addPictureUploadView() {
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
 
+        LinearLayout pictureUploadLayout = new LinearLayout(this);
+        pictureUploadLayout.setLayoutParams(layoutParams);
+        pictureUploadLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+        ImageView imageView = new ImageView(this);
+        LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(
+                120, // Set the desired width for the ImageView
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        imageView.setLayoutParams(imageViewParams);
+        imageView.setImageResource(R.drawable.baseline_cloud_upload_24);
+
+        Button buttonSelectPicture = new Button(this);
+        buttonSelectPicture.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        ));
+        buttonSelectPicture.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
+        buttonSelectPicture.setText("Select Picture");
+
+//        pictureUploadLayout.addView(imageView);
+//        pictureUploadLayout.addView(buttonSelectPicture);
+//        layoutPictureUpload.addView(pictureUploadLayout);
+
+        EditText editTextStep = new EditText(this);
+        LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+        editTextStep.setLayoutParams(editTextParams);
+        editTextStep.setHint("Step");
+
+        pictureUploadLayout.addView(imageView);
+        pictureUploadLayout.addView(buttonSelectPicture);
+        pictureUploadLayout.addView(editTextStep);
+
+        layoutPictureUpload.addView(pictureUploadLayout);
+        stepCount++;
+        pictureUploadViews.add(pictureUploadLayout);
+
+
+    }
+
+
+    private void deletePictureUploadView() {
+        if (pictureUploadViews.size() > 0) {
+            // Get the last added pictureUploadLayout
+            LinearLayout lastPictureUploadLayout = (LinearLayout) pictureUploadViews.get(pictureUploadViews.size() - 1);
+
+            // Remove it from the layoutPictureUpload
+            layoutPictureUpload.removeView(lastPictureUploadLayout);
+
+            // Remove it from the pictureUploadViews list
+            pictureUploadViews.remove(lastPictureUploadLayout);
+
+            stepCount--;
+        }
+    }
 
     private void deleteStepField() {
         if (mStepCount <= 2) {
