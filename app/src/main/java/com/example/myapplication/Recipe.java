@@ -4,32 +4,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Recipe implements Serializable {
-    private int mImageResId;
+    private String mImgPath;
     private String mTitle;
     private String mDescription;
-    private boolean mThumbUp;
-    private boolean mCollected;
+    private int mThumbUp;
+    private int mCollected;
     private String mNickName;
-
-    // define field ingredients
-    private String[] mIngredients;
-
+    private ArrayList<RecipeIngredient> mIngredients;
     private ArrayList<RecipeStep> mRecipeSteps;
-
-//    private List
-
-    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
-        mImageResId = imageResId;
+    public Recipe(String imgPath, String title, String description, int thumbUp, int collected, String nickName, ArrayList<RecipeIngredient> recipeIngredients, ArrayList<RecipeStep> recipeSteps){
+        mImgPath = imgPath;
         mTitle = title;
         mDescription = description;
         mThumbUp = thumbUp;
         mCollected = collected;
         mNickName = nickName;
-        mIngredients = ingredients;
+        mIngredients = recipeIngredients;
         mRecipeSteps = recipeSteps;
     }
-    public int getImageResId() {
-        return mImageResId;
+    public String getImgPath() {
+        return mImgPath;
     }
 
     public String getTitle() {
@@ -44,7 +38,7 @@ public class Recipe implements Serializable {
         return mNickName;
     }
 
-    public String[] getIngredients() {
+    public ArrayList<RecipeIngredient> getIngredients() {
         return mIngredients;
     }
 
@@ -52,11 +46,11 @@ public class Recipe implements Serializable {
         return mRecipeSteps;
     }
 
-    public boolean isThumbUp() {
+    public int getThumbUp() {
         return mThumbUp;
     }
 
-    public boolean isCollected() {
+    public int getCollected() {
         return mCollected;
     }
 }

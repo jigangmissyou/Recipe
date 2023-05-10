@@ -14,7 +14,7 @@ public class RecipeStepViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bind(RecipeStep recipeStep) {
-        stepImageView.setImageResource(recipeStep.getImageResourceId());
+        stepImageView.setImageResource(R.drawable.pic1);
         stepTextView.setText(recipeStep.getDescription());
     }
 }

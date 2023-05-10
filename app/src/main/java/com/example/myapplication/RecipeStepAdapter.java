@@ -20,7 +20,8 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
         // define the data to be displayed
         RecipeStep step = steps.get(position);
         // get the image from the ContentItem object
-        int image = step.getImageResourceId();
+//        int image = step.getImageResourceId();
+        int image = R.drawable.pic1;
         // get the description from the ContentItem object
         String description = step.getDescription();
         // set the image

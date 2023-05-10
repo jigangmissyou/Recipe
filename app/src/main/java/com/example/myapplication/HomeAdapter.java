@@ -43,7 +43,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         // define the data to be displayed
         Recipe recipe = recipes.get(position);
         // get the image from the ContentItem object
-        int image = recipe.getImageResId();
+        int image = R.drawable.pic1;
         // get the title from the ContentItem object
         String title = recipe.getTitle();
         // get the description from the ContentItem object
