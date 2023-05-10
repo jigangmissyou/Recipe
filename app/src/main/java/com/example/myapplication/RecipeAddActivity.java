@@ -69,12 +69,12 @@ public class RecipeAddActivity extends AppCompatActivity {
             }
         });
 
-        buttonDelIngredient.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteIngredientField();
-            }
-        });
+//        buttonDelIngredient.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                deleteIngredientField();
+//            }
+//        });
 
         buttonDelStep.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +84,9 @@ public class RecipeAddActivity extends AppCompatActivity {
         });
 
         // Add initial ingredient and step fields
-        addIngredientField();
+        setButtonAddIngredient2();
         addStepField();
+        deleteIngredientField();
 //        deleteIngredientField();
 //        deleteStepField();
     }
@@ -175,6 +176,51 @@ public class RecipeAddActivity extends AppCompatActivity {
         mIngredientCount++;
     }
 
+    private void setButtonAddIngredient2(){
+        // Find the "button_add_ingredient" button
+        Button addIngredientButton = findViewById(R.id.button_add_ingredient);
+
+// Add click listener to the button
+        addIngredientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the parent layout of the ingredient rows
+                LinearLayout ingredientLayout = findViewById(R.id.layout_recipe_ingredients);
+
+                // Create a new LinearLayout for the new ingredient row
+                LinearLayout newIngredientLayout = new LinearLayout(getApplicationContext());
+                newIngredientLayout.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                newIngredientLayout.setOrientation(LinearLayout.HORIZONTAL);
+
+                // Create the "ingredient" EditText
+                EditText ingredientEditText = new EditText(getApplicationContext());
+                ingredientEditText.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1));
+                ingredientEditText.setHint("Ingredient");
+
+                // Create the "unit" EditText
+                EditText unitEditText = new EditText(getApplicationContext());
+                unitEditText.setLayoutParams(new LinearLayout.LayoutParams(
+                        0,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1));
+                unitEditText.setHint("Unit");
+
+                // Add the "ingredient" and "unit" EditTexts to the new ingredient row
+                newIngredientLayout.addView(ingredientEditText);
+                newIngredientLayout.addView(unitEditText);
+
+                // Add the new ingredient row to the parent layout
+                ingredientLayout.addView(newIngredientLayout);
+            }
+        });
+
+    }
+
 //    private void deleteIngredientField() {
 //        // Create new edit text for ingredient
 //        EditText editTextIngredient = new EditText(this);
@@ -238,15 +284,38 @@ public class RecipeAddActivity extends AppCompatActivity {
     }
 
     private void deleteIngredientField() {
-        if (mIngredientCount <= 2) {
-            return;
-        }
-        // Remove the last ingredient field
-        View lastIngredientView = mLayoutRecipeIngredients.getChildAt(mIngredientCount - 1);
-        mLayoutRecipeIngredients.removeView(lastIngredientView);
-        // Decrement ingredient count
-        mIngredientCount--;
+        // Find the "button_del_ingredient" button
+        Button delIngredientButton = findViewById(R.id.button_del_ingredient);
+
+// Add click listener to the button
+        delIngredientButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the parent layout of the ingredient rows
+                LinearLayout ingredientLayout = findViewById(R.id.layout_recipe_ingredients);
+
+                // Get the index of the last ingredient row
+                int lastIndex = ingredientLayout.getChildCount() - 1;
+
+                // Make sure there is at least one ingredient row
+                if (lastIndex >= 0) {
+                    // Remove the last ingredient row from the parent layout
+                    ingredientLayout.removeViewAt(lastIndex);
+                }
+            }
+        });
+
+//        if (mIngredientCount <= 2) {
+//            return;
+//        }
+//        // Remove the last ingredient field
+//        View lastIngredientView = mLayoutRecipeIngredients.getChildAt(mIngredientCount - 1);
+//        mLayoutRecipeIngredients.removeView(lastIngredientView);
+//        // Decrement ingredient count
+//        mIngredientCount--;
     }
+
+
 
     private void deleteStepField() {
         if (mStepCount <= 2) {

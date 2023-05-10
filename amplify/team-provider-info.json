@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-recipe-dev-211603-authRole",
+      "UnauthRoleArn": "arn:aws:iam::754961902138:role/amplify-recipe-dev-211603-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::754961902138:role/amplify-recipe-dev-211603-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-recipe-dev-211603-deployment",
+      "UnauthRoleName": "amplify-recipe-dev-211603-unauthRole",
+      "StackName": "amplify-recipe-dev-211603",
+      "StackId": "arn:aws:cloudformation:us-west-2:754961902138:stack/amplify-recipe-dev-211603/4bd2b2b0-ef13-11ed-91fc-0a19dbe1a8d9",
+      "AmplifyAppId": "d1dsiaagpsjzl3"
+    },
+    "categories": {
+      "auth": {
+        "recipea240d039": {}
+      },
+      "storage": {
+        "jigang0510amplify": {}
+      }
+    }
+  }
+}
