@@ -1,9 +1,14 @@
 package com.example.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.FileUtils;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
@@ -15,8 +20,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import com.squareup.picasso.Picasso;
+
 
 public class RecipeAddActivity extends AppCompatActivity {
 
@@ -37,8 +53,13 @@ public class RecipeAddActivity extends AppCompatActivity {
     private LinearLayout layoutPictureUpload;
     private int stepCount = 1;
 
+    private int REQUEST_IMAGE_PICKER = 1;
+
     private List<View> pictureUploadViews = new ArrayList<>();
 
+    private String selectedPictureUrlOrPath = null;
+
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +70,7 @@ public class RecipeAddActivity extends AppCompatActivity {
         mEditTextRecipeName = findViewById(R.id.edit_text_recipe_name);
         mEditTextRecipeDescription = findViewById(R.id.edit_text_recipe_description);
         mLayoutRecipeIngredients = findViewById(R.id.layout_recipe_ingredients);
-        mLayoutRecipeSteps = findViewById(R.id.layout_recipe_steps);
+        mLayoutRecipeSteps = findViewById(R.id.layout_picture_upload);
         mButtonAddRecipe = findViewById(R.id.button_add_recipe);
         buttonAddIngredient = findViewById(R.id.button_add_ingredient);
 //        buttonAddStep = findViewById(R.id.button_add_step);
@@ -103,7 +124,7 @@ public class RecipeAddActivity extends AppCompatActivity {
 
         // Add initial ingredient and step fields
         setButtonAddIngredient2();
-        addStepField();
+//        addStepField();
         deleteIngredientField();
 //        deleteIngredientField();
 //        deleteStepField();
@@ -134,19 +155,40 @@ public class RecipeAddActivity extends AppCompatActivity {
                 }
             }
         }
-
         // Get recipe steps
         ArrayList<RecipeStep> recipeSteps = new ArrayList<>();
+        // log mLayoutRecipeSteps
+        Log.d("RecipeAddActivityStep", "mLayoutRecipeSteps.getChildCount() = " + mLayoutRecipeSteps.getChildCount());
         for (int i = 0; i < mLayoutRecipeSteps.getChildCount(); i++) {
             View child = mLayoutRecipeSteps.getChildAt(i);
+            Log.d("RecipeAddActivityStep", "child = " + child.toString());
+            // picture upload url
             if (child instanceof LinearLayout) {
                 LinearLayout linearLayout = (LinearLayout) child;
-                Log.d("RecipeAddActivity", "linearLayout.getChildCount() = " + linearLayout.getChildCount());
+                Log.d("RecipeAddActivityStep", "linearLayout.getChildCount() = " + linearLayout.getChildCount());
+                for (int j = 0; j < linearLayout.getChildCount(); j++) {
+                    View innerChild = linearLayout.getChildAt(j);
+                    Log.d("RecipeAddActivityStep", "innerChild = " + innerChild.toString());
+                    if (innerChild instanceof EditText) {
+                        EditText editTextStep = (EditText) innerChild;
+                        String stepName = editTextStep.getText().toString();
+                        String pictureUploadUrl = (String) linearLayout.getTag(); // Get the picture upload URL from the tag
+                        // log pictureUploadUrl
+                        Log.d("RecipeAddActivityStep", "pictureUploadUrl = " + pictureUploadUrl);
+                        if (!TextUtils.isEmpty(stepName)) {
+                            recipeSteps.add(new RecipeStep(0, stepName, 0 ,pictureUploadUrl));
+                        }
+                    }
+
+                }
+            }
+            if (child instanceof LinearLayout) {
+                LinearLayout linearLayout = (LinearLayout) child;
+                Log.d("RecipeAddActivityCheck", "linearLayout.getChildCount() = " + linearLayout.getChildCount());
                 for (int j = 0; j < linearLayout.getChildCount(); j++) {
                     View innerChild = linearLayout.getChildAt(j);
                     if (innerChild instanceof EditText) {
                         EditText editTextStep = (EditText) innerChild;
-                        Log.d("RecipeAddActivity", "editTextStep = " + editTextStep.getText().toString());
                         String stepName = editTextStep.getText().toString();
                         if (!TextUtils.isEmpty(stepName)) {
                             recipeSteps.add(new RecipeStep(0, stepName, 0 ,""));
@@ -154,6 +196,10 @@ public class RecipeAddActivity extends AppCompatActivity {
                     }
                 }
             }
+        }
+        // log recipeSteps
+        for (RecipeStep recipeStep : recipeSteps) {
+            Log.d("RecipeAddActivity", "recipeStep = " + recipeStep.getDescription());
         }
         // Validate input
         if (TextUtils.isEmpty(recipeName)) {
@@ -343,7 +389,7 @@ public class RecipeAddActivity extends AppCompatActivity {
         pictureUploadLayout.setLayoutParams(layoutParams);
         pictureUploadLayout.setOrientation(LinearLayout.HORIZONTAL);
 
-        ImageView imageView = new ImageView(this);
+        imageView = new ImageView(this);
         LinearLayout.LayoutParams imageViewParams = new LinearLayout.LayoutParams(
                 120, // Set the desired width for the ImageView
                 LinearLayout.LayoutParams.WRAP_CONTENT
@@ -358,11 +404,6 @@ public class RecipeAddActivity extends AppCompatActivity {
         ));
         buttonSelectPicture.setTextSize(TypedValue.COMPLEX_UNIT_SP, 10);
         buttonSelectPicture.setText("Select Picture");
-
-//        pictureUploadLayout.addView(imageView);
-//        pictureUploadLayout.addView(buttonSelectPicture);
-//        layoutPictureUpload.addView(pictureUploadLayout);
-
         EditText editTextStep = new EditText(this);
         LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -378,7 +419,21 @@ public class RecipeAddActivity extends AppCompatActivity {
         layoutPictureUpload.addView(pictureUploadLayout);
         stepCount++;
         pictureUploadViews.add(pictureUploadLayout);
+        buttonSelectPicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openImagePicker();
+                imageView.setImageResource(R.drawable.baseline_cloud_upload_24);
+                // Update the EditText with the selected picture's URL or file path
+                editTextStep.setText(selectedPictureUrlOrPath);
 
+                //log select picture url or path
+                if(selectedPictureUrlOrPath != null){
+                    Log.d("select picture url", selectedPictureUrlOrPath);
+                }
+
+            }
+        });
 
     }
 
@@ -398,16 +453,80 @@ public class RecipeAddActivity extends AppCompatActivity {
         }
     }
 
-    private void deleteStepField() {
-        if (mStepCount <= 2) {
-            return;
-        }
-        Log.d("xxxxxx", "deleteStepField: mStepCount = " + mStepCount);
-        // Remove the last step field
-        View lastStepView = mLayoutRecipeSteps.getChildAt(mStepCount - 1);
-        Log.d("RecipeAddActivity", "lastStepView = " + lastStepView);
-        mLayoutRecipeSteps.removeView(lastStepView);
-        // Decrement ingredient count
-        mStepCount--;
+    private void openImagePicker() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, REQUEST_IMAGE_PICKER);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_PICKER && resultCode == RESULT_OK && data != null) {
+            // The user has selected a file
+            Uri fileUri = data.getData();
+            String filePath = FileUtility.getPath(this, fileUri);
+
+            if (filePath != null) {
+                // File path is available, save the file to your project
+                String destinationPath = getFilesDir().getAbsolutePath() + "/uploaded_images/";
+                File destinationDir = new File(destinationPath);
+                if (!destinationDir.exists()) {
+                    destinationDir.mkdirs();
+                }
+                Log.d("check folder", "Destination: " + destinationPath);
+                String destinationFileName = "uploaded_image.jpg";
+                //set new filename for each image
+                destinationFileName = "uploaded_image" + System.currentTimeMillis() + ".jpg";
+                File destinationFile = new File(destinationDir, destinationFileName);
+
+                try {
+                    copyFileFromUri(this, fileUri, destinationFile);
+                    // File saved successfully, do something with it
+                    // For example, display the image in an ImageView
+                    imageView.setImageURI(Uri.fromFile(destinationFile));
+                    // You can also pass the file path to other methods or classes within your project
+                    processImageFile(destinationFile.getAbsolutePath());
+                    // Store the file path as a string variable
+                    selectedPictureUrlOrPath = destinationFile.getAbsolutePath();
+                    // set tag for each image
+                    imageView.setTag(destinationFile.getAbsolutePath());
+
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, "Failed to save the image file", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "Failed to get the file path", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void processImageFile(String filePath) {
+        // TODO: Implement further processing logic for the image file
+        // You can perform any desired operations on the saved image file within your project.
+        // log filePath to Logcat
+        Log.d("Image File Path", filePath);
+    }
+
+    private void copyFileFromUri(Context context, Uri uri, File destinationFile) throws IOException {
+        InputStream inputStream = context.getContentResolver().openInputStream(uri);
+        OutputStream outputStream = new FileOutputStream(destinationFile);
+        byte[] buffer = new byte[4 * 1024]; // Adjust the buffer size as per your requirement
+        int bytesRead;
+        while ((bytesRead = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytesRead);
+        }
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
+    }
+
+
+
+
+
+
 }

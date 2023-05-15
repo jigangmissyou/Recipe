@@ -74,26 +74,14 @@
             android:text="Steps" />
 
         <LinearLayout
-            android:id="@+id/layout_step_1"
+            android:id="@+id/layout_picture_upload"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/layout_picture_upload"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <!-- Placeholder layout for dynamically created views -->
-
-            </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
                 <Button
                     android:id="@+id/button_add_step"
                     android:layout_width="50dp"
@@ -105,12 +93,8 @@
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="-" />
-
             </LinearLayout>
-
         </LinearLayout>
-
-
 
     </LinearLayout>
 
