@@ -136,7 +136,7 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
                         return true;
                     case R.id.menu_item_2:
                         //Navigate to recipe add activity
-                        Intent intent = new Intent(HomeActivity.this, RecipeAddActivity.class);
+                        Intent intent = new Intent(HomeActivity.this, RecipeFormActivity.class);
                         startActivity(intent);
                         return true;
                     case R.id.menu_item_3:

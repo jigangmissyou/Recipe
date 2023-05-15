@@ -1,0 +1,73 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-recipe-dev-211603-authRole",
+      "UnauthRoleArn": "arn:aws:iam::754961902138:role/amplify-recipe-dev-211603-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::754961902138:role/amplify-recipe-dev-211603-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-recipe-dev-211603-deployment",
+      "UnauthRoleName": "amplify-recipe-dev-211603-unauthRole",
+      "StackName": "amplify-recipe-dev-211603",
+      "StackId": "arn:aws:cloudformation:us-west-2:754961902138:stack/amplify-recipe-dev-211603/4bd2b2b0-ef13-11ed-91fc-0a19dbe1a8d9",
+      "AmplifyAppId": "d1dsiaagpsjzl3"
+    }
+  },
+  "auth": {
+    "recipea240d039": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false,
+      "frontendAuthConfig": {
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-recipe-dev-211603-deployment/amplify-cfn-templates/auth/recipea240d039-cloudformation-template.json",
+        "logicalId": "authrecipea240d039"
+      },
+      "lastPushTimeStamp": "2023-05-10T10:04:24.421Z",
+      "output": {
+        "UserPoolId": "us-west-2_EURGw5poM",
+        "AppClientIDWeb": "2m0bkht47ag17saaitcip8ulc4",
+        "AppClientID": "7oo2k6e47tpqgleb5bdu0gknt9",
+        "IdentityPoolId": "us-west-2:a249035c-6f23-4934-b88f-8155446cec40",
+        "UserPoolArn": "arn:aws:cognito-idp:us-west-2:754961902138:userpool/us-west-2_EURGw5poM",
+        "IdentityPoolName": "recipea240d039_identitypool_a240d039__dev",
+        "UserPoolName": "recipea240d039_userpool_a240d039"
+      },
+      "lastPushDirHash": "SJeIIMG79p0AsjVJ9DC5i+BJCoY="
+    }
+  },
+  "storage": {
+    "jigang0510amplify": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "lastPushTimeStamp": "2023-05-10T09:55:47.648Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-recipe-dev-211603-deployment/amplify-cfn-templates/storage/cloudformation-template.json",
+        "logicalId": "storagejigang0510amplify"
+      },
+      "output": {
+        "BucketName": "recipe0510211603-dev",
+        "Region": "us-west-2"
+      },
+      "lastPushDirHash": "TdLLgZ5J1Vni9ZgmvA2zeFLYSRQ="
+    }
+  }
+}

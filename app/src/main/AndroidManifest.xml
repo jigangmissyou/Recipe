@@ -12,6 +12,11 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
+            android:name=".RecipeFormActivity"
+            android:exported="false"
+            android:label="@string/title_activity_recipe_form"
+            android:theme="@style/Theme.MyApplication" />
+        <activity
             android:name=".RecipeAddActivity"
             android:exported="false" />
         <activity
@@ -67,9 +72,12 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.PROFILE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
     </application>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
