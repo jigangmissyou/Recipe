@@ -11,6 +11,8 @@ public class StepItem {
     private ImageView imageView;
     private Bitmap image;
 
+    private String imagePath;
+
     public StepItem(EditText editText, ImageView imageView) {
         this.layout = layout;
         this.editText = editText;
@@ -31,6 +33,11 @@ public class StepItem {
 
     public Bitmap getImage() {
         return image;
+    }
+
+    public String getImagePath() {
+        // from imgView get path
+        return imagePath;
     }
 
     public void setImage(Bitmap image) {

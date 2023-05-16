@@ -42,6 +42,7 @@ public class RecipeFormActivity extends AppCompatActivity {
     private List<StepItem> stepItems;
 
     private Map<String, Integer> stepIndexMap = new HashMap<>();
+    private Map<String, String> stepImagePathMap = new HashMap<>();
 
 
     @Override
@@ -124,16 +125,10 @@ public class RecipeFormActivity extends AppCompatActivity {
                 uploadImage(v);
             }
         });
-        imageView.setId(View.generateViewId());
 
-        // set image view tag to the step index
-        String viewTag = generateUniqueTag(); // 生成唯一标识符的方法需要您自行实现
-        // set tag to the image view
-        imageView.setTag(viewTag);
-        // put the step index and the tag to the map
-        stepIndexMap.put(viewTag, stepItems.size());
-        // log stepIndexMap
-        Log.d("stepIndexMap", stepIndexMap.toString());
+        imageView.setTag("step_image_" + stepItems.size());
+        stepIndexMap.put(imageView.getTag().toString(), stepItems.size());
+
 
         stepItems.add(new StepItem(stepEditText, imageView));
 
@@ -145,6 +140,7 @@ public class RecipeFormActivity extends AppCompatActivity {
         StepItem stepItem = findStepItem(stepItemLayout);
         if (stepItem != null) {
             stepItems.remove(stepItem);
+
         }
     }
 
@@ -182,8 +178,6 @@ public class RecipeFormActivity extends AppCompatActivity {
         Recipe2 recipe = new Recipe2(title, description, ingredients, steps);
 
         // 这里可以执行提交操作，将菜谱数据发送到服务器或执行其他逻辑
-
-
         // 示例：输出菜谱数据
         StringBuilder sb = new StringBuilder();
         sb.append("Title: ").append(recipe.getTitle()).append("\n");
@@ -193,60 +187,53 @@ public class RecipeFormActivity extends AppCompatActivity {
             sb.append("- ").append(ingredient).append("\n");
         }
         sb.append("Steps: ").append("\n");
-        for (Step step : recipe.getSteps()) {
+        Step[] stepArray = recipe.getSteps().toArray(new Step[0]);
+        for(int i=0; i<stepArray.length; i++) {
+            Step step = stepArray[i];
             sb.append("- ").append(step.getText()).append("\n");
+            sb.append("Image: ").append(stepImagePathMap.get("step_image_" + i)).append("\n");
             // 在这里可以处理步骤的图片预览或上传逻辑
         }
+
         //check sb content is correct
 
         Log.d("RecipeFormActivity", sb.toString());
+        // according to /data/user/0/com.example.myapplication/files/images/image_1684236600088.jpg, to get the image
+
 
         // 示例：显示菜谱数据
         Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
     }
-    public void uploadImage(View view) {
-        // 创建一个用于选择图片的Intent
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");  // 限制只选择图片文件
-        startActivityForResult(Intent.createChooser(intent, "选择图片"), PICK_IMAGE_REQUEST);
-    }
 
+    public void uploadImage(View view) {
+        String viewTag = (String) view.getTag();
+        int stepIndex = getStepIndexFromTag(viewTag);
+        startActivityForResult(getImageSelectionIntent(), PICK_IMAGE_REQUEST + stepIndex);
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            Uri imageUri = data.getData();
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode >= PICK_IMAGE_REQUEST && requestCode < PICK_IMAGE_REQUEST + stepItems.size()) {
+                int stepIndex = requestCode - PICK_IMAGE_REQUEST;
+                Uri imageUri = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                    String imagePath = saveBitmapToLocal(bitmap);
 
-            try {
-                // 将Uri转换为Bitmap对象
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-
-                // 保存Bitmap到本地存储
-                String imagePath = saveBitmapToLocal(bitmap);
-                View view = findViewById(R.id.step_image_view);
-                // 获取点击视图的标识符
-                String viewTag = (String) view.getTag();
-
-                // 根据标识符找到对应的步骤索引
-                int stepIndex = getStepIndexFromTag(viewTag);
-
-                // 根据索引获取对应的StepItem对象
-                StepItem stepItem = stepItems.get(stepIndex);
-
-                //log stepItem
-                Log.d("stepItem", stepItem.toString());
-
-                // 设置本地图片路径到StepItem中
-                stepItem.setImagePath(imagePath);
-
-                // 在ImageView中显示选择的图片
-                stepItem.getImageView().setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+                    StepItem stepItem = stepItems.get(stepIndex);
+                    stepItem.setImagePath(imagePath);
+                    // set image path to tag
+                    stepImagePathMap.put(stepItem.getImageView().getTag().toString(), imagePath);
+                    stepItem.getImageView().setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
+
 
     private String saveBitmapToLocal(Bitmap bitmap) {
         // 创建图片文件
@@ -279,13 +266,19 @@ public class RecipeFormActivity extends AppCompatActivity {
         // 返回对应的步骤索引
         Integer stepIndex = stepIndexMap.get(tag);
         // log stepIndex
-        Log.d("stepIndex", stepIndex.toString());
         if (stepIndex != null) {
             return stepIndex;
         }
 
         return 0; // 这里示例返回0，您需要根据实际情况进行相应修改
     }
+
+    private Intent getImageSelectionIntent() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        return Intent.createChooser(intent, "选择图片");
+    }
+
 
     // 生成唯一标识符
     private String generateUniqueTag() {
