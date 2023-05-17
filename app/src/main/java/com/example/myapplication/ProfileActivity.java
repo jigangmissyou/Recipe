@@ -18,8 +18,8 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         TextView profileName = findViewById(R.id.profile_name);
         TextView profileBio = findViewById(R.id.profile_bio);
-        String name = "Jigang Guo";
-        String bio = "I'm a new android developer.";
+        String name = getUsername();
+        String bio = "I want to be a Chef :)";
         profileName.setText(name);
         profileBio.setText(bio);
         Button logout = findViewById(R.id.logout_button);
@@ -37,9 +37,14 @@ public class ProfileActivity extends AppCompatActivity {
             SharedPreferences sharedPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean("is_logged_in", false);
-            editor.apply(); // 提交更改
+            editor.apply();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
+     }
+
+     private String getUsername() {
+         SharedPreferences sharedPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+         return sharedPref.getString("username", "");
      }
 }
