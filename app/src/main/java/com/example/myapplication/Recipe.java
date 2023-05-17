@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class Recipe implements Serializable {
+
+    private int mId;
     private int mImageResId;
     private String mTitle;
     private String mDescription;
@@ -28,6 +30,15 @@ public class Recipe implements Serializable {
         mIngredients = ingredients;
         mRecipeSteps = recipeSteps;
     }
+
+    public void setId(int id) {
+        mId = id;
+    }
+
+    public int getId() {
+        return mId;
+    }
+
     public int getImageResId() {
         return mImageResId;
     }

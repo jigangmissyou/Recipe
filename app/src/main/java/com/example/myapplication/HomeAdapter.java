@@ -18,6 +18,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     List<Recipe> recipes;
     Context context;
     private HomeAdapter.onItemClickListener onItemClickListener;
+    private OnEditClickListener onEditClickListener;
+
 
     public HomeAdapter(Context context, List<Recipe> recipe) {
         this.context = context;
@@ -59,6 +61,24 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
         holder.title.setText(title);
         holder.description.setText(description);
+        holder.thumb_up_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "You have liked this recipe!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.collect_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "You have collected this recipe!", Toast.LENGTH_SHORT).show();
+            }
+        });
+//        holder.edit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(context, "You have edited this recipe!", Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 
 
@@ -74,6 +94,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
         public ImageView collect_icon;
 
+        public ImageView edit;
+
         public TextView description;
 
         public ViewHolder(View itemView) {
@@ -83,6 +105,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             description = itemView.findViewById(R.id.content_description_text_view);
             thumb_up_icon = itemView.findViewById(R.id.thumb_up_button);
             collect_icon = itemView.findViewById(R.id.collect_button);
+            edit = itemView.findViewById(R.id.edit_button);
             images.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,6 +143,29 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                     }
                 }
             });
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // redirect to edit page, and pass the recipe id
+                    if (onItemClickListener != null) {
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Recipe item = recipes.get(position);
+                            onEditClickListener.onEditClick(item);                        }
+                        // redirect to edit page
+                    }
+
+                }
+            });
         }
     }
+
+    public void setOnEditClickListener(OnEditClickListener listener) {
+        this.onEditClickListener = listener;
+    }
+    public interface OnEditClickListener {
+        void onEditClick(Recipe recipe);
+    }
+
 }
+

@@ -124,6 +124,14 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
                 startActivity(intent);
             }
         });
+        adapter2.setOnEditClickListener(new HomeAdapter.OnEditClickListener() {
+            @Override
+            public void onEditClick(Recipe recipe) {
+                Intent editIntent = new Intent(HomeActivity.this,RecipeFormActivity.class);
+                editIntent.putExtra("recipeId", recipe.getId());
+                startActivity(editIntent);
+            }
+        });
     }
 
     /**

@@ -150,6 +150,7 @@ public class DbHandler extends SQLiteOpenHelper {
                 cursor1.close();
                 //    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
                 Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, null, recipeStep);
+                recipe.setId(id);
                 arrayList.add(recipe);
                 //                post.setId(id);
 //                post.setThumbUpCounts(thumbUpCounts);

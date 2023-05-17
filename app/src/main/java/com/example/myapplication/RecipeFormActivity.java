@@ -278,7 +278,7 @@ public class RecipeFormActivity extends AppCompatActivity {
             return stepIndex;
         }
 
-        return 0; // 这里示例返回0，您需要根据实际情况进行相应修改
+        return 0;
     }
 
     private Intent getImageSelectionIntent() {
@@ -286,12 +286,4 @@ public class RecipeFormActivity extends AppCompatActivity {
         intent.setType("image/*");
         return Intent.createChooser(intent, "选择图片");
     }
-
-
-    // 生成唯一标识符
-    private String generateUniqueTag() {
-        return UUID.randomUUID().toString();
-    }
-
-
 }
