@@ -19,6 +19,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     Context context;
     private HomeAdapter.onItemClickListener onItemClickListener;
     private OnEditClickListener onEditClickListener;
+    private OnDeleteClickListener onDeleteClickListener;
 
 
     public HomeAdapter(Context context, List<Recipe> recipe) {
@@ -96,6 +97,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
         public ImageView edit;
 
+        public ImageView delete;
+
         public TextView description;
 
         public ViewHolder(View itemView) {
@@ -106,6 +109,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             thumb_up_icon = itemView.findViewById(R.id.thumb_up_button);
             collect_icon = itemView.findViewById(R.id.collect_button);
             edit = itemView.findViewById(R.id.edit_button);
+            delete = itemView.findViewById(R.id.delete_button);
+
             images.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -157,14 +162,39 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
                 }
             });
+
+            delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // redirect to edit page, and pass the recipe id
+                    if (onItemClickListener != null) {
+                        int position = getBindingAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Recipe item = recipes.get(position);
+                            onDeleteClickListener.onDeleteClick(item);                        }
+                        // redirect to edit page
+                    }
+
+                }
+            });
+
+
+
         }
     }
 
     public void setOnEditClickListener(OnEditClickListener listener) {
         this.onEditClickListener = listener;
     }
+
+    public void setOnDeleteClickListener(OnDeleteClickListener listener) {
+        this.onDeleteClickListener = listener;
+    }
     public interface OnEditClickListener {
         void onEditClick(Recipe recipe);
+    }
+    public interface OnDeleteClickListener {
+        void onDeleteClick(Recipe recipe);
     }
 
 }

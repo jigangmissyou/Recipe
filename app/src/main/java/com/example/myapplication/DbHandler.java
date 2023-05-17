@@ -88,32 +88,24 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     // update data in TABLE_POSTS
-    public boolean updatePost(int id,String title,String description,String steps,String author,int category,int thumbUpCounts,int collectedCounts, String imagePath){
+    public boolean updatePost(Post post){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("TITLE",title);
-        contentValues.put("DESCRIPTION",description);
-        contentValues.put("STEPS",steps);
-        contentValues.put("AUTHOR",author);
-        contentValues.put("CATEGORY",category);
-        contentValues.put("THUMB_UP_COUNTS",thumbUpCounts);
-        contentValues.put("COLLECTED_COUNTS",collectedCounts);
-        contentValues.put("IMAGE_PATH",imagePath);
-        db.update(TABLE_POSTS,contentValues,"ID = ?",new String[]{String.valueOf(id)});
+        contentValues.put("TITLE",post.getTitle());
+        contentValues.put("DESCRIPTION",post.getDescription());
+//        contentValues.put("AUTHOR",post.getAuthor());
+//        contentValues.put("CATEGORY",post.getCategory());
+//        contentValues.put("THUMB_UP_COUNTS",post.getThumbUpCounts());
+//        contentValues.put("COLLECTED_COUNTS",post.getCollectedCounts());
+        contentValues.put("IMAGE_PATH",post.getImagePath());
+        db.update(TABLE_POSTS,contentValues,"ID = ?",new String[]{String.valueOf(post.getId())});
         // update steps
-        db.delete(TABLE_STEPS,"POST_ID = ?",new String[]{String.valueOf(id)});
-        String[] stepsArray = steps.split(",");
-        for(int i=0;i<stepsArray.length;i++){
-            ContentValues contentValues1 = new ContentValues();
-            contentValues1.put("DESCRIPTION",stepsArray[i]);
-            contentValues1.put("POST_ID",id);
-            db.insert(TABLE_STEPS,null,contentValues1);
-        }
+        db.delete(TABLE_STEPS,"POST_ID = ?",new String[]{String.valueOf(post.getId())});
         return true;
     }
 
     // delete data in TABLE_POSTS
-    public boolean deletePost(int id){
+    public boolean deleteRecipe(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_POSTS,"ID = ?",new String[]{String.valueOf(id)});
         db.delete(TABLE_STEPS,"POST_ID = ?",new String[]{String.valueOf(id)});
@@ -137,14 +129,14 @@ public class DbHandler extends SQLiteOpenHelper {
                 String imagePath = cursor.getString(7);
                 String query1 = "SELECT * FROM " + TABLE_STEPS + " WHERE POST_ID = " + id;
                 Cursor cursor1 = db.rawQuery(query1,null);
-                ArrayList<RecipeStep> recipeStep = new ArrayList<>();
+                ArrayList<Step> recipeStep = new ArrayList<>();
                 if(cursor1.moveToFirst()){
                     do{
                         int postId = cursor1.getInt(1);
                         String stepDesc = cursor1.getString(2);
                         int stepOrder = cursor1.getInt(3);
                         String stepImgPath = cursor1.getString(4);
-                        recipeStep.add(new RecipeStep(stepDesc,stepImgPath));
+                        recipeStep.add(new Step(stepDesc,stepImgPath, stepOrder));
                     }while(cursor1.moveToNext());
                 }
                 cursor1.close();
@@ -192,6 +184,43 @@ public class DbHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         return arrayList;
+    }
+
+    //get one recipe
+    public Recipe getRecipe(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_POSTS + " WHERE ID = " + id;
+        Cursor cursor = db.rawQuery(query,null);
+        if(cursor.moveToFirst()){
+            int id1 = cursor.getInt(0);
+            String title = cursor.getString(1);
+            String description = cursor.getString(2);
+            String author = cursor.getString(3);
+            int category = cursor.getInt(4);
+            int thumbUpCounts = cursor.getInt(5);
+            int collectedCounts = cursor.getInt(6);
+            String imagePath = cursor.getString(7);
+            String query1 = "SELECT * FROM " + TABLE_STEPS + " WHERE POST_ID = " + id;
+            Cursor cursor1 = db.rawQuery(query1,null);
+            ArrayList<Step> recipeStep = new ArrayList<>();
+            if(cursor1.moveToFirst()){
+                do{
+                    int postId = cursor1.getInt(1);
+                    String stepDesc = cursor1.getString(2);
+                    int stepOrder = cursor1.getInt(3);
+                    String stepImgPath = cursor1.getString(4);
+                    recipeStep.add(new Step(stepDesc,stepImgPath, stepOrder));
+                }while(cursor1.moveToNext());
+            }
+            cursor1.close();
+            //    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
+            Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, null, recipeStep);
+            recipe.setId(id);
+            cursor.close();
+            return recipe;
+        }
+        cursor.close();
+        return null;
     }
 
 

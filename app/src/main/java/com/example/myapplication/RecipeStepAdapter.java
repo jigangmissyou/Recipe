@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.util.List;
 public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder> {
-    private List<RecipeStep> steps;
-    public RecipeStepAdapter(List<RecipeStep> steps) {
+    private List<Step> steps;
+    public RecipeStepAdapter(List<Step> steps) {
         this.steps = steps;
     }
     @Override
@@ -20,7 +20,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     }
     @Override
     public void onBindViewHolder(RecipeStepViewHolder holder, int position) {
-        RecipeStep step = steps.get(position);
+        Step step = steps.get(position);
         String imagePath = step.getImagePath();
 
         // Load the image from the file path

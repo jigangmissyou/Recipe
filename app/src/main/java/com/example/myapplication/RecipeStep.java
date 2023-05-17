@@ -5,7 +5,6 @@ import java.io.Serializable;
 public class RecipeStep implements Serializable {
     private String description;
     private String imagePath;
-
     private int stepOrder;
 
     public RecipeStep(String description, String imagePath) {

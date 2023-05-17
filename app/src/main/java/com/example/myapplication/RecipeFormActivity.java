@@ -44,6 +44,12 @@ public class RecipeFormActivity extends AppCompatActivity {
     private Map<String, Integer> stepIndexMap = new HashMap<>();
     private Map<String, String> stepImagePathMap = new HashMap<>();
 
+    private String recipeTitle;
+    private String recipeDescription;
+    private List<String> recipeIngredients;
+    private List<Step> recipeSteps;
+
+    private int recipeId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +94,25 @@ public class RecipeFormActivity extends AppCompatActivity {
                 submitRecipe();
             }
         });
+
+        // 获取传递的数据
+        Bundle extras = getIntent().getExtras();
+        if (extras != null && extras.containsKey("recipeId")) {
+            // 获取数据
+            recipeId = extras.getInt("recipeId");
+            // 根据id获取数据
+            DbHandler dbHandler = new DbHandler(this);
+            Recipe recipe2 = dbHandler.getRecipe(recipeId);
+            recipeSteps = recipe2.getRecipeSteps();
+
+            recipeTitle = recipe2.getTitle();
+            recipeDescription = recipe2.getDescription();
+            recipeIngredients = extras.getStringArrayList("ingredients");
+//            recipeSteps = extras.getParcelableArrayList("steps");
+
+            // 进行数据回显
+            populateFormWithData();
+        }
     }
 
     private void addIngredientEditText() {
@@ -168,9 +193,12 @@ public class RecipeFormActivity extends AppCompatActivity {
         List<Step> steps = new ArrayList<>();
         for (StepItem stepItem : stepItems) {
             String stepText = stepItem.getEditText().getText().toString();
+
             Bitmap stepImage = stepItem.getImage();
+            // get image path
+            String imagePath = stepImagePathMap.get(stepItem.getImageView().getTag().toString());
             if (!TextUtils.isEmpty(stepText)) {
-                Step step = new Step(stepText, stepImage);
+                Step step = new Step(stepText, imagePath, 0);
                 steps.add(step);
             }
         }
@@ -179,18 +207,30 @@ public class RecipeFormActivity extends AppCompatActivity {
 
         // add posts to sqlite
         DbHandler dbHandler = new DbHandler(this);
-        int lastId = dbHandler.addPost(post);
-        // log the last id
-        Log.d("lastId", String.valueOf(lastId));
-        if(lastId > 0){
+        if(recipeId == -1) {
+            int lastId = dbHandler.addPost(post);
+            Log.d("lastId", String.valueOf(lastId));
+            if(lastId > 0){
+                Step[] stepArray = steps.toArray(new Step[0]);
+                for(int i=0; i<stepArray.length; i++) {
+                    Step step = stepArray[i];
+                    long id = dbHandler.addSteps(lastId, step.getDescription(), i, stepImagePathMap.get("step_image_" + i));
+                    // log the last id
+                    Log.d("lastId2", String.valueOf(id));
+                }
+            }
+        } else if (recipeId > 0) {
+            post.setId(recipeId);
+            dbHandler.updatePost(post);
             Step[] stepArray = steps.toArray(new Step[0]);
             for(int i=0; i<stepArray.length; i++) {
                 Step step = stepArray[i];
-                long id = dbHandler.addSteps(lastId, step.getText(), i, stepImagePathMap.get("step_image_" + i));
+                long id = dbHandler.addSteps(recipeId, step.getDescription(), i, stepImagePathMap.get("step_image_" + i));
                 // log the last id
-                Log.d("lastId2", String.valueOf(id));
+                Log.d("lastId3", String.valueOf(id));
             }
         }
+
         // 这里可以执行提交操作，将菜谱数据发送到服务器或执行其他逻辑
         // 示例：输出菜谱数据
 //        StringBuilder sb = new StringBuilder();
@@ -286,4 +326,72 @@ public class RecipeFormActivity extends AppCompatActivity {
         intent.setType("image/*");
         return Intent.createChooser(intent, "选择图片");
     }
+
+    private void populateFormWithData() {
+        EditText titleEditText = findViewById(R.id.title_edit_text);
+        EditText descriptionEditText = findViewById(R.id.description_edit_text);
+
+        titleEditText.setText(recipeTitle);
+        descriptionEditText.setText(recipeDescription);
+
+        if (recipeIngredients != null && !recipeIngredients.isEmpty()) {
+            for (String ingredient : recipeIngredients) {
+                addIngredientEditTextWithData(ingredient);
+            }
+        }
+
+        if (recipeSteps != null && !recipeSteps.isEmpty()) {
+            for (Step step : recipeSteps) {
+                addStepItemWithData(step);
+            }
+        }
+    }
+
+    private void addIngredientEditTextWithData(String ingredientText) {
+        Context context = getApplicationContext();
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        EditText editText = new EditText(context);
+        editText.setLayoutParams(layoutParams);
+        editText.setHint("Enter ingredient");
+        editText.setText(ingredientText);
+        ingredientsLayout.addView(editText);
+        ingredientEditTexts.add(editText);
+    }
+
+    private void addStepItemWithData(Step step) {
+        Context context = getApplicationContext();
+        LayoutInflater inflater = LayoutInflater.from(context);
+        LinearLayout stepItemLayout = (LinearLayout) inflater.inflate(R.layout.step_item, stepsLayout, false);
+
+        EditText stepEditText = stepItemLayout.findViewById(R.id.step_edit_text);
+        ImageView imageView = stepItemLayout.findViewById(R.id.step_image_view);
+        Button removeStepBtn = stepItemLayout.findViewById(R.id.remove_step_button);
+
+        removeStepBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeStepItem(stepItemLayout);
+            }
+        });
+
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadImage(v);
+            }
+        });
+
+        stepEditText.setText(step.getDescription());
+        Bitmap stepImage = BitmapFactory.decodeFile(step.getImagePath());
+        imageView.setImageBitmap(stepImage);
+        imageView.setTag("step_image_" + stepItems.size());
+        stepIndexMap.put(imageView.getTag().toString(), stepItems.size());
+        stepItems.add(new StepItem(stepEditText, imageView));
+        stepsLayout.addView(stepItemLayout);
+
+    }
+
 }
