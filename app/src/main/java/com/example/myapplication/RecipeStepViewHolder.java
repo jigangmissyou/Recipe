@@ -13,8 +13,8 @@ public class RecipeStepViewHolder extends RecyclerView.ViewHolder {
         stepTextView = itemView.findViewById(R.id.step1_text);
     }
 
-    public void bind(RecipeStep recipeStep) {
-        stepImageView.setImageResource(recipeStep.getImageResourceId());
-        stepTextView.setText(recipeStep.getDescription());
-    }
+//    public void bind(RecipeStep recipeStep) {
+//        stepImageView.setImageResource(recipeStep.getImageResourceId());
+//        stepTextView.setText(recipeStep.getDescription());
+//    }
 }

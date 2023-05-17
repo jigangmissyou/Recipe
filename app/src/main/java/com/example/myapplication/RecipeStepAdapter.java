@@ -1,8 +1,12 @@
 package com.example.myapplication;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.File;
 import java.util.List;
 public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder> {
     private List<RecipeStep> steps;
@@ -16,18 +20,24 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     }
     @Override
     public void onBindViewHolder(RecipeStepViewHolder holder, int position) {
-//        holder.bind(steps.get(position));
-        // define the data to be displayed
         RecipeStep step = steps.get(position);
-        // get the image from the ContentItem object
-        int image = step.getImageResourceId();
-        // get the description from the ContentItem object
+        String imagePath = step.getImagePath();
+
+        // Load the image from the file path
+        File imageFile = new File(imagePath);
+        if (imageFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+            // Set the image bitmap
+            holder.stepImageView.setImageBitmap(bitmap);
+        } else {
+            // Set a default image or handle the case when the file doesn't exist
+            holder.stepImageView.setImageResource(R.drawable.image2);
+        }
+
         String description = step.getDescription();
-        // set the image
-        holder.stepImageView.setImageResource(image);
-        // set the description
         holder.stepTextView.setText(description);
     }
+
 
     @Override
     public int getItemCount() {

@@ -7,8 +7,8 @@ public class Recipe implements Serializable {
     private int mImageResId;
     private String mTitle;
     private String mDescription;
-    private boolean mThumbUp;
-    private boolean mCollected;
+    private int mThumbUp;
+    private int mCollected;
     private String mNickName;
 
     // define field ingredients
@@ -18,7 +18,7 @@ public class Recipe implements Serializable {
 
 //    private List
 
-    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
+    public Recipe(int imageResId, String title, String description, int thumbUp, int collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
         mImageResId = imageResId;
         mTitle = title;
         mDescription = description;
@@ -52,11 +52,11 @@ public class Recipe implements Serializable {
         return mRecipeSteps;
     }
 
-    public boolean isThumbUp() {
+    public int isThumbUp() {
         return mThumbUp;
     }
 
-    public boolean isCollected() {
+    public int isCollected() {
         return mCollected;
     }
 }

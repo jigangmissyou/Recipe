@@ -4,19 +4,29 @@ import java.io.Serializable;
 
 public class RecipeStep implements Serializable {
     private String description;
-    private int imageResourceId;
+    private String imagePath;
 
-    public RecipeStep(String description, int imageResourceId) {
+    private int stepOrder;
+
+    public RecipeStep(String description, String imagePath) {
         this.description = description;
-        this.imageResourceId = imageResourceId;
+        this.imagePath = imagePath;
+    }
+
+    public void setStepOrder(int stepOrder) {
+        this.stepOrder = stepOrder;
+    }
+
+    public int getStepOrder() {
+        return stepOrder;
     }
 
     public String getDescription() {
         return description;
     }
 
-    public int getImageResourceId() {
-        return imageResourceId;
+    public String getImagePath() {
+        return imagePath;
     }
 }
 

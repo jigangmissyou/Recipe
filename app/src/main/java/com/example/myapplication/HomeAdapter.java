@@ -40,21 +40,27 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        // define the data to be displayed
         Recipe recipe = recipes.get(position);
-        // get the image from the ContentItem object
-        int image = recipe.getImageResId();
-        // get the title from the ContentItem object
+        int imageResId = recipe.getImageResId();
         String title = recipe.getTitle();
-        // get the description from the ContentItem object
         String description = recipe.getDescription();
-        // set the image
-        holder.images.setImageResource(image);
-        // set the title
+
+        // Load the image from the file path
+//        String imagePath = recipe.getImagePath();
+//        File imageFile = new File(imagePath);
+//        if (imageFile.exists()) {
+//            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+//            // Set the image bitmap
+//            holder.images.setImageBitmap(bitmap);
+//        } else {
+            // Set a default image or handle the case when the file doesn't exist
+            holder.images.setImageResource(R.drawable.image2);
+//        }
+
         holder.title.setText(title);
-        // set the description
         holder.description.setText(description);
     }
+
 
     @Override
     public int getItemCount() {

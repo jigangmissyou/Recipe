@@ -120,8 +120,8 @@ public class DbHandler extends SQLiteOpenHelper {
         return true;
     }
 
-    public ArrayList<Post> getAllPost(String orderBy){
-        ArrayList<Post> arrayList = new ArrayList<>();
+    public ArrayList<Recipe> getAllRecipe(String orderBy){
+        ArrayList<Recipe> arrayList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_POSTS + " ORDER BY " + orderBy + " DESC";
         Cursor cursor = db.rawQuery(query,null);
@@ -135,11 +135,26 @@ public class DbHandler extends SQLiteOpenHelper {
                 int thumbUpCounts = cursor.getInt(5);
                 int collectedCounts = cursor.getInt(6);
                 String imagePath = cursor.getString(7);
-                Post post = new Post(title, description, author,imagePath, category);
-                post.setId(id);
-                post.setThumbUpCounts(thumbUpCounts);
-                post.setCollectedCounts(collectedCounts);
-                arrayList.add(post);
+                String query1 = "SELECT * FROM " + TABLE_STEPS + " WHERE POST_ID = " + id;
+                Cursor cursor1 = db.rawQuery(query1,null);
+                ArrayList<RecipeStep> recipeStep = new ArrayList<>();
+                if(cursor1.moveToFirst()){
+                    do{
+                        int postId = cursor1.getInt(1);
+                        String stepDesc = cursor1.getString(2);
+                        int stepOrder = cursor1.getInt(3);
+                        String stepImgPath = cursor1.getString(4);
+                        recipeStep.add(new RecipeStep(stepDesc,stepImgPath));
+                    }while(cursor1.moveToNext());
+                }
+                cursor1.close();
+                //    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
+                Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, null, recipeStep);
+                arrayList.add(recipe);
+                //                post.setId(id);
+//                post.setThumbUpCounts(thumbUpCounts);
+//                post.setCollectedCounts(collectedCounts);
+//                arrayList.add(post);
 
 
                 // get steps
@@ -169,7 +184,7 @@ public class DbHandler extends SQLiteOpenHelper {
 //                        ingredients.add(new RecipeIngredient(postId,name,quantity,unit));
 //                    }while(cursor2.moveToNext());
 //                }
-                cursor.close();
+//                cursor.close();
 //                Post post = new Post(title,description,thumbUpCounts,collectedCounts,author,ingredients,recipeStep);
 //                arrayList.add(recipe);
             }while(cursor.moveToNext());
