@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements GalleryAdapter.OnItemClickListener {
-    private boolean isLoggedIn = false;
+    private String username = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +32,10 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
         setContentView(R.layout.activity_dashboard);
         checkLoginStatus();
         showGallery();
-        showContentList(isLoggedIn);
+        showContentList();
         showBottomNav();
         layoutTab();
         search();
-//        checkLoginStatus();
     }
 
     @Override
@@ -63,10 +62,13 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
     /**
      * Show a vertical list of content items
      */
-    public void showContentList(boolean isLoggedIn) {
+    public void showContentList() {
         DbHandler dbHandler = new DbHandler(this);
         ArrayList<Recipe> recipes = dbHandler.getAllRecipe(" ID ");
-        HomeAdapter adapter2 = new HomeAdapter(this, recipes, isLoggedIn);
+        SharedPreferences sharedPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        username = sharedPref.getString("username", null);
+        Log.d("nickname Username4", "Username: " + username);
+        HomeAdapter adapter2 = new HomeAdapter(this, recipes, username);
         RecyclerView contentRecyclerView = findViewById(R.id.content_item_layout);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this);
         contentRecyclerView.setLayoutManager(layoutManager2);
@@ -129,7 +131,7 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
                         return true;
                     case R.id.menu_item_2:
                         checkLoginStatus();
-                        if (!isLoggedIn){
+                        if (username == null){
                             Toast.makeText(HomeActivity.this, "Please login to add recipe", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                             startActivity(intent);
@@ -144,7 +146,7 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
                         return true;
                     case R.id.menu_item_4:
                         checkLoginStatus();
-                        if (!isLoggedIn){
+                        if (username == null){
                             Toast.makeText(HomeActivity.this, "Please login to view profile", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                             startActivity(intent);
@@ -197,8 +199,8 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
 
     private void checkLoginStatus() {
         SharedPreferences sharedPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
-        isLoggedIn = sharedPref.getBoolean("is_logged_in", false);
-        Log.d("LoginInfo", "LoginInfo LoginInfo: " + isLoggedIn);
+        username = sharedPref.getString("username", null);
+        Log.d("LoginInfo", "LoginInfo LoginInfo: " + username);
     }
 
     public void search(){

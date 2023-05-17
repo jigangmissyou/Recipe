@@ -25,13 +25,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     private OnEditClickListener onEditClickListener;
     private OnDeleteClickListener onDeleteClickListener;
 
-    private boolean isLoggedIn = false;
+    private boolean isCurrentUser = false;
+
+    private String username = null;
 
 
-    public HomeAdapter(Context context, List<Recipe> recipe, boolean isLoggedIn){
+    public HomeAdapter(Context context, List<Recipe> recipe, String username){
         this.context = context;
         this.recipes = recipe;
-        this.isLoggedIn = isLoggedIn;
+        this.username = username;
     }
 
     public interface onItemClickListener {
@@ -51,7 +53,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
-        int imageResId = recipe.getImageResId();
         ArrayList<Step> stepList = recipe.getRecipeSteps();
         // find the last step as the image
         Step lastStep = stepList.get(stepList.size()-1);
@@ -64,11 +65,15 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             // Load the image from the file path
             holder.images.setImageBitmap(BitmapFactory.decodeFile(imagePath));
         }
-
+        holder.bind(recipe);
         String title = recipe.getTitle();
         String description = recipe.getDescription();
         holder.title.setText(title);
         holder.description.setText(description);
+        Log.d("nickname", recipe.getNickName());
+        Log.d("nickname username", username);
+        isCurrentUser = recipe.getNickName().equals(username);
+        Log.d("nickname username isCurrentUser", String.valueOf(isCurrentUser));
         holder.thumb_up_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +86,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 Toast.makeText(context, "You have collected this recipe!", Toast.LENGTH_SHORT).show();
             }
         });
+        holder.edit.setVisibility(isCurrentUser ? View.VISIBLE : View.GONE);
+        holder.delete.setVisibility(isCurrentUser ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -101,6 +108,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
         public TextView description;
 
+        private Recipe recipe;
+
         public ViewHolder(View itemView) {
             super(itemView);
             images = itemView.findViewById(R.id.content_image_view);
@@ -110,15 +119,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             collect_icon = itemView.findViewById(R.id.collect_button);
             edit = itemView.findViewById(R.id.edit_button);
             delete = itemView.findViewById(R.id.delete_button);
-            Log.d("HomeAdapter", "isLoggedIn: " + isLoggedIn);
-            if (isLoggedIn) {
-                edit.setVisibility(itemView.VISIBLE);
-                delete.setVisibility(itemView.VISIBLE);
-            } else {
-                edit.setVisibility(itemView.GONE);
-                delete.setVisibility(itemView.GONE);
-            }
-
             images.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -185,9 +185,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
                 }
             });
-
-
-
+        }
+        public void bind(Recipe recipe) {
+            this.recipe = recipe;
         }
     }
 

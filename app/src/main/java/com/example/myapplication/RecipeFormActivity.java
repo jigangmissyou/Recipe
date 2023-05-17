@@ -194,8 +194,8 @@ public class RecipeFormActivity extends AppCompatActivity {
             }
         }
 
-        Post post = new Post(title, description, "author", "", 1);
-
+        String username = getSharedPreferences("login_pref", MODE_PRIVATE).getString("username", "");
+        Post post = new Post(title, description, username, "", 1);
         // add posts to sqlite
         DbHandler dbHandler = new DbHandler(this);
         if(recipeId == -1) {
@@ -351,7 +351,6 @@ public class RecipeFormActivity extends AppCompatActivity {
                 uploadImage(v);
             }
         });
-
         stepEditText.setText(step.getDescription());
         Bitmap stepImage = BitmapFactory.decodeFile(step.getImagePath());
         imageView.setImageBitmap(stepImage);
@@ -359,7 +358,6 @@ public class RecipeFormActivity extends AppCompatActivity {
         stepIndexMap.put(imageView.getTag().toString(), stepItems.size());
         stepItems.add(new StepItem(stepEditText, imageView));
         stepsLayout.addView(stepItemLayout);
-
     }
 
 }
