@@ -104,11 +104,16 @@ public class RegisterActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-
-
-                // TODO: Send the registration data to the server for processing
-//                Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
-
+                DbHandler dbHandler = new DbHandler(RegisterActivity.this);
+                boolean ret = dbHandler.register(username,password,email);
+                if (ret) {
+                    Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
+                    // redirect to the login activity
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(RegisterActivity.this, "Registration failed!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

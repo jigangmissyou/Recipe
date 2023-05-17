@@ -4,85 +4,97 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
-        <!-- Toolbar on the right -->
-        <ImageButton
-            android:id="@+id/share_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:src="@android:drawable/ic_menu_share"
-        />
-
-
-        <!-- Banner Image -->
-        <ImageView
-            android:id="@+id/banner_image"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/pic1" />
+            android:layout_height="match_parent">
 
-        <!-- Recipe Title -->
-        <TextView
-            android:id="@+id/recipe_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recipe Title"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-        <!-- Recipe Author -->
-        <TextView
-            android:id="@+id/recipe_author"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="By: Nickname"
-            android:textSize="16sp"
-            android:textColor="#999999"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+                        <!-- Toolbar on the right -->
+                        <ImageButton
+                            android:id="@+id/share_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:src="@android:drawable/ic_menu_share" />
 
-        <!-- Ingredients -->
-<!--        <TextView-->
-<!--            android:id="@+id/recipe_ingredients"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Ingredients"-->
-<!--            android:textSize="20sp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:layout_marginStart="16dp"-->
-<!--            android:layout_marginEnd="16dp"/>-->
+                        <!-- Banner Image -->
+                        <ImageView
+                            android:id="@+id/banner_image"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/pic1" />
 
-        <!-- Ingredients Image -->
-<!--        <ImageView-->
-<!--            android:id="@+id/ingredients_image"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="200dp"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:src="@drawable/pic2" />-->
+                        <!-- Recipe Title -->
+                        <TextView
+                            android:id="@+id/recipe_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Recipe Title"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp" />
 
-        <!-- Steps -->
-        <TextView
-            android:id="@+id/step_desc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Steps"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"/>
+                        <!-- Recipe Author -->
+                        <TextView
+                            android:id="@+id/recipe_author"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="By: Nickname"
+                            android:textSize="16sp"
+                            android:textColor="#999999"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recipe_step_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
+                        <!-- Ingredients -->
+                        <TextView
+                            android:id="@+id/ingredients_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Ingredients"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp" />
+                        <!-- Ingredients horizontal list -->
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recipe_ingredients_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp" />
+
+
+                        <TextView
+                            android:id="@+id/step_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Steps"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recipe_step_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent" />
+
+                        <!-- Steps Images -->
+                </LinearLayout>
+        </ScrollView>
+
 
         <!-- Steps Images -->
         </LinearLayout>

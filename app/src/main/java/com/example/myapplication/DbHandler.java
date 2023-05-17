@@ -23,6 +23,7 @@ public class DbHandler extends SQLiteOpenHelper {
     public static final String TABLE_STEPS = "my_steps";
 
     public static final String TABLE_INGREDIENTS = "my_ingredients";
+    private static final String TABLE_USERS = "my_user";
 
     // define table columns
     public DbHandler(Context context) {
@@ -36,6 +37,8 @@ public class DbHandler extends SQLiteOpenHelper {
         db.execSQL("create table " + TABLE_CATEGORIES + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,NAME TEXT)");
         db.execSQL("create table " + TABLE_STEPS + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,DESCRIPTION TEXT,POST_ID INTEGER, STEP_ORDER INTEGER, IMAGE_PATH TEXT)");
         db.execSQL("create table " + TABLE_INGREDIENTS + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,POST_ID INTEGER, NAME TEXT, QUANTITY TEXT, UNIT TEXT)");
+        db.execSQL("create table " + TABLE_USERS + "(ID INTEGER PRIMARY KEY AUTOINCREMENT,USERNAME TEXT,PASSWORD TEXT,EMAIL TEXT,IMAGE_PATH TEXT)");
+
     }
 
     @Override
@@ -44,6 +47,7 @@ public class DbHandler extends SQLiteOpenHelper {
        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STEPS);
        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INGREDIENTS);
+         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
        onCreate(db);
     }
 
@@ -88,7 +92,7 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     // update data in TABLE_POSTS
-    public boolean updatePost(Post post){
+     public boolean updatePost(Post post){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("TITLE",post.getTitle());
@@ -144,42 +148,6 @@ public class DbHandler extends SQLiteOpenHelper {
                 Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, null, recipeStep);
                 recipe.setId(id);
                 arrayList.add(recipe);
-                //                post.setId(id);
-//                post.setThumbUpCounts(thumbUpCounts);
-//                post.setCollectedCounts(collectedCounts);
-//                arrayList.add(post);
-
-
-                // get steps
-//                String query1 = "SELECT * FROM " + TABLE_STEPS + " WHERE POST_ID = " + id;
-//                Cursor cursor1 = db.rawQuery(query1,null);
-//                ArrayList<RecipeStep> recipeStep = new ArrayList<>();
-//                if(cursor1.moveToFirst()){
-//                    do{
-//                        int postId = cursor1.getInt(1);
-//                        String stepDesc = cursor1.getString(2);
-//                        int stepOrder = cursor1.getInt(3);
-//                        String stepImgPath = cursor1.getString(4);
-//                        recipeStep.add(new RecipeStep(postId,stepDesc,stepOrder,stepImgPath));
-//                    }while(cursor1.moveToNext());
-//                }
-//                cursor1.close();
-//                // get ingredients
-//                String query2 = "SELECT * FROM " + TABLE_INGREDIENTS + " WHERE POST_ID = " + id;
-//                Cursor cursor2 = db.rawQuery(query2,null);
-//                ArrayList<RecipeIngredient> ingredients = new ArrayList<>();
-//                if(cursor2.moveToFirst()){
-//                    do{
-//                        int postId = cursor2.getInt(1);
-//                        String name = cursor2.getString(2);
-//                        String quantity = cursor2.getString(3);
-//                        String unit = cursor2.getString(4);
-//                        ingredients.add(new RecipeIngredient(postId,name,quantity,unit));
-//                    }while(cursor2.moveToNext());
-//                }
-//                cursor.close();
-//                Post post = new Post(title,description,thumbUpCounts,collectedCounts,author,ingredients,recipeStep);
-//                arrayList.add(recipe);
             }while(cursor.moveToNext());
         }
         cursor.close();
@@ -221,6 +189,33 @@ public class DbHandler extends SQLiteOpenHelper {
         }
         cursor.close();
         return null;
+    }
+
+    // register
+    public boolean register(String username, String password, String email){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("USERNAME",username);
+        contentValues.put("PASSWORD",password);
+        contentValues.put("EMAIL",email);
+        long result = db.insert(TABLE_USERS,null,contentValues);
+        if(result == -1){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    // login
+    public boolean findUser(String username, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_USERS + " WHERE USERNAME = '" + username + "' AND PASSWORD = '" + password + "'";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.getCount() > 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,7 +38,22 @@ public class DetailActivity extends AppCompatActivity {
 //      Glide.with(this).load(recipe.getBannerImageUrl()).into(bannerImageView);
         titleTextView.setText(recipe.getTitle());
         nicknameTextView.setText(recipe.getNickName());
-        bannerImageView.setImageResource(R.drawable.image2);
+        // select the first step image as banner image
+        if (!recipe.getRecipeSteps().isEmpty()) {
+            int lastStepIndex = recipe.getRecipeSteps().size() - 1;
+            if (lastStepIndex >= 0) {
+                Step lastStep = recipe.getRecipeSteps().get(lastStepIndex);
+                String lastStepImagePath = lastStep.getImagePath();
+                if (lastStepImagePath != null) {
+                    // Load the last step image into the bannerImageView
+                    Bitmap bitmap = BitmapFactory.decodeFile(lastStepImagePath);
+                    bannerImageView.setImageBitmap(bitmap);
+                }
+            }
+        }
+        // get recipe.getRecipeSteps and set the first image to bannerImageView
+        // show the first step image in bannerImageView
+//        bannerImageView.setImageResource(R.drawable.image2);
         shareRecipe();
         // Abandoned code
 //        for (RecipeStep step : recipe.getRecipeSteps()) {

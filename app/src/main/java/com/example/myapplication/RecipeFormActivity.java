@@ -48,7 +48,6 @@ public class RecipeFormActivity extends AppCompatActivity {
     private String recipeDescription;
     private List<String> recipeIngredients;
     private List<Step> recipeSteps;
-
     private int recipeId = -1;
 
     @Override
@@ -78,15 +77,6 @@ public class RecipeFormActivity extends AppCompatActivity {
                 addStepItem();
             }
         });
-
-//        ImageView stepImageView = findViewById(R.id.step_image_view);
-//        stepImageView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                uploadImage(v);
-//            }
-//        });
-
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -231,27 +221,9 @@ public class RecipeFormActivity extends AppCompatActivity {
                 Log.d("lastId3", String.valueOf(id));
             }
         }
-
-        // 这里可以执行提交操作，将菜谱数据发送到服务器或执行其他逻辑
-        // 示例：输出菜谱数据
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("Title: ").append(recipe.getTitle()).append("\n");
-//        sb.append("Description: ").append(recipe.getDescription()).append("\n");
-//        sb.append("Ingredients: ").append("\n");
-//        for (String ingredient : recipe.getIngredients()) {
-//            sb.append("- ").append(ingredient).append("\n");
-//        }
-//        sb.append("Steps: ").append("\n");
-
-
-        //check sb content is correct
-
-//        Log.d("RecipeFormActivity", sb.toString());
-        // according to /data/user/0/com.example.myapplication/files/images/image_1684236600088.jpg, to get the image
-
-
-        // 示例：显示菜谱数据
-//        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+        // redirect to home page
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
     }
 
     public void uploadImage(View view) {
@@ -308,24 +280,19 @@ public class RecipeFormActivity extends AppCompatActivity {
     }
 
     private int getStepIndexFromTag(String tag) {
-        // TODO: 根据标识符找到对应的步骤索引
-        // 在添加步骤布局时，为每个步骤项的视图设置一个唯一的标识符，这里需要根据标识符找到对应的步骤索引
-        //log tag
         Log.d("tag_to_see", tag);
-        // 返回对应的步骤索引
         Integer stepIndex = stepIndexMap.get(tag);
         // log stepIndex
         if (stepIndex != null) {
             return stepIndex;
         }
-
         return 0;
     }
 
     private Intent getImageSelectionIntent() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        return Intent.createChooser(intent, "选择图片");
+        return Intent.createChooser(intent, "choose pic");
     }
 
     private void populateFormWithData() {

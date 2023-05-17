@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -22,15 +24,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements GalleryAdapter.OnItemClickListener {
+    private boolean isLoggedIn = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        checkLoginStatus();
         showGallery();
-        showContentList();
+        showContentList(isLoggedIn);
         showBottomNav();
         layoutTab();
         search();
+//        checkLoginStatus();
     }
 
     @Override
@@ -57,10 +63,10 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
     /**
      * Show a vertical list of content items
      */
-    public void showContentList() {
+    public void showContentList(boolean isLoggedIn) {
         DbHandler dbHandler = new DbHandler(this);
         ArrayList<Recipe> recipes = dbHandler.getAllRecipe(" ID ");
-        HomeAdapter adapter2 = new HomeAdapter(this, recipes);
+        HomeAdapter adapter2 = new HomeAdapter(this, recipes, isLoggedIn);
         RecyclerView contentRecyclerView = findViewById(R.id.content_item_layout);
         RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(this);
         contentRecyclerView.setLayoutManager(layoutManager2);
@@ -122,19 +128,30 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
                         // Handle menu item 1 click
                         return true;
                     case R.id.menu_item_2:
-                        //Navigate to recipe add activity
-                        Intent intent = new Intent(HomeActivity.this, RecipeFormActivity.class);
-                        startActivity(intent);
+                        checkLoginStatus();
+                        if (!isLoggedIn){
+                            Toast.makeText(HomeActivity.this, "Please login to add recipe", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        } else {
+                            //Navigate to recipe add activity
+                            Intent intent = new Intent(HomeActivity.this, RecipeFormActivity.class);
+                            startActivity(intent);
+                        }
                         return true;
                     case R.id.menu_item_3:
                         Toast.makeText(HomeActivity.this, "Please wait to release :)", Toast.LENGTH_SHORT).show();
-                        // TODO IF USER IS NOT LOGGED IN, NAVIGATE TO LOGIN ACTIVITY
                         return true;
                     case R.id.menu_item_4:
-                        // TODO IF USER IS NOT LOGGED IN, NAVIGATE TO LOGIN ACTIVITY
-                        // Navigate to the profile activity
-                        Intent intent2 = new Intent(HomeActivity.this, ProfileActivity.class);
-                        startActivity(intent2);
+                        checkLoginStatus();
+                        if (!isLoggedIn){
+                            Toast.makeText(HomeActivity.this, "Please login to view profile", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                            startActivity(intent);
+                        }
                         return true;
                     default:
                         return false;
@@ -176,6 +193,12 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
             public void onTabReselected(TabLayout.Tab tab) {}
         });
 
+    }
+
+    private void checkLoginStatus() {
+        SharedPreferences sharedPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
+        isLoggedIn = sharedPref.getBoolean("is_logged_in", false);
+        Log.d("LoginInfo", "LoginInfo LoginInfo: " + isLoggedIn);
     }
 
     public void search(){

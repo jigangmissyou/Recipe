@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
@@ -21,10 +25,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     private OnEditClickListener onEditClickListener;
     private OnDeleteClickListener onDeleteClickListener;
 
+    private boolean isLoggedIn = false;
 
-    public HomeAdapter(Context context, List<Recipe> recipe) {
+
+    public HomeAdapter(Context context, List<Recipe> recipe, boolean isLoggedIn){
         this.context = context;
         this.recipes = recipe;
+        this.isLoggedIn = isLoggedIn;
     }
 
     public interface onItemClickListener {
@@ -45,21 +52,21 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     public void onBindViewHolder(ViewHolder holder, int position) {
         Recipe recipe = recipes.get(position);
         int imageResId = recipe.getImageResId();
+        ArrayList<Step> stepList = recipe.getRecipeSteps();
+        // find the last step as the image
+        Step lastStep = stepList.get(stepList.size()-1);
+        String imagePath = lastStep.getImagePath();
+        if (imagePath == null) {
+            // Set a default image or handle the case when the file doesn't exist
+            holder.images.setImageResource(R.drawable.baseline_panorama_24);
+        }else{
+            // log the image path
+            // Load the image from the file path
+            holder.images.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+        }
+
         String title = recipe.getTitle();
         String description = recipe.getDescription();
-
-        // Load the image from the file path
-//        String imagePath = recipe.getImagePath();
-//        File imageFile = new File(imagePath);
-//        if (imageFile.exists()) {
-//            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-//            // Set the image bitmap
-//            holder.images.setImageBitmap(bitmap);
-//        } else {
-            // Set a default image or handle the case when the file doesn't exist
-            holder.images.setImageResource(R.drawable.image2);
-//        }
-
         holder.title.setText(title);
         holder.description.setText(description);
         holder.thumb_up_icon.setOnClickListener(new View.OnClickListener() {
@@ -74,14 +81,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
                 Toast.makeText(context, "You have collected this recipe!", Toast.LENGTH_SHORT).show();
             }
         });
-//        holder.edit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(context, "You have edited this recipe!", Toast.LENGTH_SHORT).show();
-//            }
-//        });
     }
-
 
     @Override
     public int getItemCount() {
@@ -110,6 +110,14 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             collect_icon = itemView.findViewById(R.id.collect_button);
             edit = itemView.findViewById(R.id.edit_button);
             delete = itemView.findViewById(R.id.delete_button);
+            Log.d("HomeAdapter", "isLoggedIn: " + isLoggedIn);
+            if (isLoggedIn) {
+                edit.setVisibility(itemView.VISIBLE);
+                delete.setVisibility(itemView.VISIBLE);
+            } else {
+                edit.setVisibility(itemView.GONE);
+                delete.setVisibility(itemView.GONE);
+            }
 
             images.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -196,6 +204,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
     public interface OnDeleteClickListener {
         void onDeleteClick(Recipe recipe);
     }
+
+
 
 }
 
