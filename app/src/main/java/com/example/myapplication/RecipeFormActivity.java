@@ -175,34 +175,42 @@ public class RecipeFormActivity extends AppCompatActivity {
             }
         }
 
-        Recipe2 recipe = new Recipe2(title, description, ingredients, steps);
+        Post post = new Post(title, description, "author", "", 1);
 
+        // add posts to sqlite
+        DbHandler dbHandler = new DbHandler(this);
+        int lastId = dbHandler.addPost(post);
+        // log the last id
+        Log.d("lastId", String.valueOf(lastId));
+        if(lastId > 0){
+            Step[] stepArray = steps.toArray(new Step[0]);
+            for(int i=0; i<stepArray.length; i++) {
+                Step step = stepArray[i];
+                long id = dbHandler.addSteps(lastId, step.getText(), i, stepImagePathMap.get("step_image_" + i));
+                // log the last id
+                Log.d("lastId2", String.valueOf(id));
+            }
+        }
         // 这里可以执行提交操作，将菜谱数据发送到服务器或执行其他逻辑
         // 示例：输出菜谱数据
-        StringBuilder sb = new StringBuilder();
-        sb.append("Title: ").append(recipe.getTitle()).append("\n");
-        sb.append("Description: ").append(recipe.getDescription()).append("\n");
-        sb.append("Ingredients: ").append("\n");
-        for (String ingredient : recipe.getIngredients()) {
-            sb.append("- ").append(ingredient).append("\n");
-        }
-        sb.append("Steps: ").append("\n");
-        Step[] stepArray = recipe.getSteps().toArray(new Step[0]);
-        for(int i=0; i<stepArray.length; i++) {
-            Step step = stepArray[i];
-            sb.append("- ").append(step.getText()).append("\n");
-            sb.append("Image: ").append(stepImagePathMap.get("step_image_" + i)).append("\n");
-            // 在这里可以处理步骤的图片预览或上传逻辑
-        }
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("Title: ").append(recipe.getTitle()).append("\n");
+//        sb.append("Description: ").append(recipe.getDescription()).append("\n");
+//        sb.append("Ingredients: ").append("\n");
+//        for (String ingredient : recipe.getIngredients()) {
+//            sb.append("- ").append(ingredient).append("\n");
+//        }
+//        sb.append("Steps: ").append("\n");
+
 
         //check sb content is correct
 
-        Log.d("RecipeFormActivity", sb.toString());
+//        Log.d("RecipeFormActivity", sb.toString());
         // according to /data/user/0/com.example.myapplication/files/images/image_1684236600088.jpg, to get the image
 
 
         // 示例：显示菜谱数据
-        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
+//        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
     }
 
     public void uploadImage(View view) {
