@@ -2,7 +2,9 @@ package com.example.myapplication;
 
 import android.graphics.Bitmap;
 
-public class Step implements java.io.Serializable {
+import java.io.Serializable;
+
+public class Step implements Serializable {
     private String description;
     private String imagePath;
     private int stepOrder;
@@ -35,6 +37,16 @@ public class Step implements java.io.Serializable {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public String toString() {
+        return "Step{" +
+                "imagePath='" + imagePath + '\'' +
+                ", description='" + description + '\'' +
+                // Include other relevant data fields
+                '}';
+    }
+
 
 }
 

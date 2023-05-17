@@ -68,6 +68,7 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
         adapter2.setOnItemClickListener(new HomeAdapter.onItemClickListener() {
             @Override
             public void onItemClick(Recipe item) {
+                Log.d("ITEM", "item: " + item.toString());
                 // Navigate to the detail activity
                 Intent intent = new Intent(HomeActivity.this, DetailActivity.class);
                 intent.putExtra("item", item);

@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import androidx.annotation.NonNull;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -69,5 +71,20 @@ public class Recipe implements Serializable {
 
     public int isCollected() {
         return mCollected;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "mId=" + mId +
+                ", mImageResId=" + mImageResId +
+                ", mTitle='" + mTitle + '\'' +
+                ", mDescription='" + mDescription + '\'' +
+                ", mThumbUp=" + mThumbUp +
+                ", mCollected=" + mCollected +
+                ", mNickName='" + mNickName + '\'' +
+                ", mIngredients=" + mIngredients +
+                ", mRecipeSteps=" + mRecipeSteps +
+                '}';
     }
 }

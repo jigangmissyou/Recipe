@@ -122,18 +122,18 @@ public class DbHandler extends SQLiteOpenHelper {
                 int id = cursor.getInt(0);
                 String title = cursor.getString(1);
                 String description = cursor.getString(2);
-                String author = cursor.getString(3);
-                int category = cursor.getInt(4);
-                int thumbUpCounts = cursor.getInt(5);
-                int collectedCounts = cursor.getInt(6);
-                String imagePath = cursor.getString(7);
+                String author = cursor.getString(4);
+                int category = cursor.getInt(5);
+                int thumbUpCounts = cursor.getInt(6);
+                int collectedCounts = cursor.getInt(7);
+                String imagePath = cursor.getString(8);
                 String query1 = "SELECT * FROM " + TABLE_STEPS + " WHERE POST_ID = " + id;
                 Cursor cursor1 = db.rawQuery(query1,null);
                 ArrayList<Step> recipeStep = new ArrayList<>();
                 if(cursor1.moveToFirst()){
                     do{
-                        int postId = cursor1.getInt(1);
-                        String stepDesc = cursor1.getString(2);
+                        int postId = cursor1.getInt(2);
+                        String stepDesc = cursor1.getString(1);
                         int stepOrder = cursor1.getInt(3);
                         String stepImgPath = cursor1.getString(4);
                         recipeStep.add(new Step(stepDesc,stepImgPath, stepOrder));
@@ -205,8 +205,8 @@ public class DbHandler extends SQLiteOpenHelper {
             ArrayList<Step> recipeStep = new ArrayList<>();
             if(cursor1.moveToFirst()){
                 do{
-                    int postId = cursor1.getInt(1);
-                    String stepDesc = cursor1.getString(2);
+                    int postId = cursor1.getInt(2);
+                    String stepDesc = cursor1.getString(1);
                     int stepOrder = cursor1.getInt(3);
                     String stepImgPath = cursor1.getString(4);
                     recipeStep.add(new Step(stepDesc,stepImgPath, stepOrder));

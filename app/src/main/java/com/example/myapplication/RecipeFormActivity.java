@@ -197,6 +197,7 @@ public class RecipeFormActivity extends AppCompatActivity {
             Bitmap stepImage = stepItem.getImage();
             // get image path
             String imagePath = stepImagePathMap.get(stepItem.getImageView().getTag().toString());
+            // imagePath is null, means no image is selected
             if (!TextUtils.isEmpty(stepText)) {
                 Step step = new Step(stepText, imagePath, 0);
                 steps.add(step);

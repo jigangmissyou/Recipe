@@ -1,6 +1,7 @@
 package com.example.myapplication;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +21,30 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecipeStepViewHolder
     }
     @Override
     public void onBindViewHolder(RecipeStepViewHolder holder, int position) {
-        Step step = steps.get(position);
-        String imagePath = step.getImagePath();
-
-        // Load the image from the file path
-        File imageFile = new File(imagePath);
-        if (imageFile.exists()) {
-            Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
-            // Set the image bitmap
-            holder.stepImageView.setImageBitmap(bitmap);
-        } else {
-            // Set a default image or handle the case when the file doesn't exist
-            holder.stepImageView.setImageResource(R.drawable.image2);
+        for (Step step : steps) {
+            Log.d("RecipeStepAdapter", "Step: " + step.toString());
         }
+        Step step = steps.get(position);
+        //log the step
+        String imagePath = step.getImagePath();
+        if (imagePath == null) {
+            // Set a default image or handle the case when the file doesn't exist
+            holder.stepImageView.setImageResource(R.drawable.baseline_panorama_24);
+        }else{
+            // log the image path
+            Log.d("RecipeStepAdapter", "imagePath: " + imagePath);
+            // Load the image from the file path
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                Bitmap bitmap = BitmapFactory.decodeFile(imageFile.getAbsolutePath());
+                // Set the image bitmap
+                holder.stepImageView.setImageBitmap(bitmap);
+            } else {
+                // Set a default image or handle the case when the file doesn't exist
+                holder.stepImageView.setImageResource(R.drawable.image2);
+            }
+        }
+
 
         String description = step.getDescription();
         holder.stepTextView.setText(description);

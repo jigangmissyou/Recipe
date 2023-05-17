@@ -5,7 +5,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-public class StepItem {
+import java.io.Serializable;
+
+public class StepItem implements Serializable {
     private View layout;
     private EditText editText;
     private ImageView imageView;

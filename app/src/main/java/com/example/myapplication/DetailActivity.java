@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +28,8 @@ public class DetailActivity extends AppCompatActivity {
         // load RecyclerView in recipe steps view.
         RecyclerView stepList = findViewById(R.id.recipe_step_layout);
         stepList.setLayoutManager(new LinearLayoutManager(this));
+        Log.d("RecipeStepAdapter", "Recipe Steps: " + recipe.getRecipeSteps().toString());
+
         stepList.setAdapter(new RecipeStepAdapter(recipe.getRecipeSteps()));
 //        LinearLayout stepsLayout = findViewById(R.id.recipe_steps);
         // TODO: load image from URL
