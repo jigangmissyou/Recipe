@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,20 +71,37 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         String description = recipe.getDescription();
         holder.title.setText(title);
         holder.description.setText(description);
+        Log.d("log recipe", recipe.toString());
+        // recipe.getCollected() convert to string
+
+        Log.d("log recipe2", String.valueOf(recipe.getCollected()));
+
+        holder.collect_count_text_view.setText(String.valueOf(recipe.getCollected()));
+        holder.thumb_up_count_text_view.setText(String.valueOf(recipe.getThumbUp()));
         Log.d("nickname", recipe.getNickName());
-        Log.d("nickname username", username);
+//        Log.d("nickname username", username);
         isCurrentUser = recipe.getNickName().equals(username);
         Log.d("nickname username isCurrentUser", String.valueOf(isCurrentUser));
+        // show thubm up number
         holder.thumb_up_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "You have liked this recipe!", Toast.LENGTH_SHORT).show();
+                DbHandler dbHandler = new DbHandler(context);
+                dbHandler.updatePostCounts(recipe.getId(), "thumbUp");
+                // refresh the page
+                holder.thumb_up_count_text_view.setText(String.valueOf(recipe.getThumbUp() + 1));
+
             }
         });
         holder.collect_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context, "You have collected this recipe!", Toast.LENGTH_SHORT).show();
+                DbHandler dbHandler = new DbHandler(context);
+                dbHandler.updatePostCounts(recipe.getId(), "collected");
+                //set text view to the new value
+                holder.collect_count_text_view.setText(String.valueOf(recipe.getCollected() + 1  ));
             }
         });
         holder.edit.setVisibility(isCurrentUser ? View.VISIBLE : View.GONE);
@@ -108,6 +126,11 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
 
         public TextView description;
 
+        public TextView thumb_up_count_text_view;
+
+        public TextView collect_count_text_view;
+//        public BreakIterator collect_count_text_view;
+
         private Recipe recipe;
 
         public ViewHolder(View itemView) {
@@ -119,6 +142,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
             collect_icon = itemView.findViewById(R.id.collect_button);
             edit = itemView.findViewById(R.id.edit_button);
             delete = itemView.findViewById(R.id.delete_button);
+            collect_count_text_view = itemView.findViewById(R.id.collect_count_text_view);
+            thumb_up_count_text_view = itemView.findViewById(R.id.thumb_up_count_text_view);
             images.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

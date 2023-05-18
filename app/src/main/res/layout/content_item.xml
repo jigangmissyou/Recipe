@@ -48,6 +48,16 @@
             android:layout_toEndOf="@id/content_image_view"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"/>
+        <!-- show thumb up number -->
+        <TextView
+            android:id="@+id/thumb_up_number_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content_description_text_view"
+            android:layout_toEndOf="@id/thumb_up_icon"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"/>
 
         <!-- Collect icon -->
         <ImageView
@@ -59,6 +69,16 @@
             android:layout_toEndOf="@id/thumb_up_icon"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"/>
+        <!-- show collect number -->
+        <TextView
+            android:id="@+id/collect_number_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content_description_text_view"
+            android:layout_toEndOf="@id/collect_icon"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"/>
         <!-- add eidt icon -->
         <ImageView
             android:id="@+id/edit_icon"

@@ -90,6 +90,18 @@ public class DbHandler extends SQLiteOpenHelper {
         long id = db.insert(TABLE_STEPS,null,contentValues);
         return id;
     }
+    // update thumb up counts, collected counts, add 1
+    public boolean updatePostCounts(int postId, String type){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "";
+        if(type.equals("thumbUp")){
+            query = "UPDATE " + TABLE_POSTS + " SET THUMB_UP_COUNTS = THUMB_UP_COUNTS + 1 WHERE ID = " + postId;
+        }else if(type.equals("collected")){
+            query = "UPDATE " + TABLE_POSTS + " SET COLLECTED_COUNTS = COLLECTED_COUNTS + 1 WHERE ID = " + postId;
+        }
+        db.execSQL(query);
+        return true;
+    }
 
     // update data in TABLE_POSTS
      public boolean updatePost(Post post){

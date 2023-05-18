@@ -33,10 +33,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
     //log out
      public void logout(View view) {
-         // shared preferences set to false
+         // to log out, we need to clear the shared preferences
             SharedPreferences sharedPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean("is_logged_in", false);
+            editor.clear();
             editor.apply();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);

@@ -64,12 +64,19 @@ public class Recipe implements Serializable {
     public ArrayList<Step> getRecipeSteps() {
         return mRecipeSteps;
     }
+    public void setThumbUp(int thumbUp) {
+        mThumbUp = thumbUp;
+    }
 
-    public int isThumbUp() {
+    public void setCollected(int collected) {
+        mCollected = collected;
+    }
+
+    public int getThumbUp() {
         return mThumbUp;
     }
 
-    public int isCollected() {
+    public int getCollected() {
         return mCollected;
     }
 

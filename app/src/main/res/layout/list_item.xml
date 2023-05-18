@@ -48,6 +48,16 @@
             android:layout_toEndOf="@id/content_image_view"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"/>
+        <!-- thumb up count -->
+        <TextView
+            android:id="@+id/thumb_up_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content_description_text_view"
+            android:layout_toEndOf="@id/thumb_up_button"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="16sp"/>
 
         <!-- Collect icon -->
         <ImageView
@@ -59,6 +69,16 @@
             android:layout_toEndOf="@id/thumb_up_button"
             android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"/>
+        <!-- collect count -->
+        <TextView
+            android:id="@+id/collect_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/content_description_text_view"
+            android:layout_toEndOf="@id/collect_button"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:textSize="16sp"/>
         <!-- Edit icon -->
         <ImageView
             android:id="@+id/edit_button"
