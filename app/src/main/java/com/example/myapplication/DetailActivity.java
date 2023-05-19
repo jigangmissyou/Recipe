@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -24,20 +26,25 @@ public class DetailActivity extends AppCompatActivity {
         // bind views
         ImageView bannerImageView = findViewById(R.id.banner_image);
         TextView titleTextView = findViewById(R.id.recipe_title);
+        TextView descriptionTextView = findViewById(R.id.recipe_desc);
         TextView nicknameTextView = findViewById(R.id.recipe_author);
-        // to do: load RecyclerView in recipe ingredients view.
-//        LinearLayout ingredientsLayout = findViewById(R.id.recipe_ingredients);
-        // load RecyclerView in recipe steps view.
+        RecyclerView ingredientRecyclerView = findViewById(R.id.recipe_ingredients_layout);
+        ingredientRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ArrayList<RecipeIngredient> ingredientList = recipe.getIngredients();
+        // set adapter for ingredientRecyclerView
+        IngredientAdapter ingredientAdapter = new IngredientAdapter(ingredientList);
+        ingredientRecyclerView.setAdapter(ingredientAdapter);
+
+
         RecyclerView stepList = findViewById(R.id.recipe_step_layout);
         stepList.setLayoutManager(new LinearLayoutManager(this));
         Log.d("RecipeStepAdapter", "Recipe Steps: " + recipe.getRecipeSteps().toString());
-
         stepList.setAdapter(new RecipeStepAdapter(recipe.getRecipeSteps()));
 //        LinearLayout stepsLayout = findViewById(R.id.recipe_steps);
-        // TODO: load image from URL
 //      Glide.with(this).load(recipe.getBannerImageUrl()).into(bannerImageView);
         titleTextView.setText(recipe.getTitle());
-        nicknameTextView.setText(recipe.getNickName());
+        descriptionTextView.setText(recipe.getDescription());
+        nicknameTextView.setText("By: "+recipe.getNickName());
         // select the first step image as banner image
         if (!recipe.getRecipeSteps().isEmpty()) {
             int lastStepIndex = recipe.getRecipeSteps().size() - 1;

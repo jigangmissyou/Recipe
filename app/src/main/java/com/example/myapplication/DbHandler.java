@@ -79,6 +79,35 @@ public class DbHandler extends SQLiteOpenHelper {
         return 0;
     }
 
+    // insert data into TABLE_INGREDIENTS
+    public long addIngredients(int postId, String name, String quantity, String unit){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("POST_ID",postId);
+        contentValues.put("NAME",name);
+        contentValues.put("QUANTITY",quantity);
+        contentValues.put("UNIT",unit);
+        long id = db.insert(TABLE_INGREDIENTS,null,contentValues);
+        return id;
+    }
+
+    // update data in TABLE_INGREDIENTS, first delete all ingredients of this post, then insert new ingredients
+    public boolean updateIngredients(int postId, ArrayList<RecipeIngredient> ingredients){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "DELETE FROM " + TABLE_INGREDIENTS + " WHERE POST_ID = " + postId;
+        db.execSQL(query);
+        for(int i = 0; i < ingredients.size(); i++){
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("POST_ID",postId);
+            contentValues.put("NAME",ingredients.get(i).getIngredientName());
+            contentValues.put("QUANTITY",ingredients.get(i).getIngredientQuantity());
+            contentValues.put("UNIT",ingredients.get(i).getIngredientUnit());
+            long id = db.insert(TABLE_INGREDIENTS,null,contentValues);
+        }
+        return true;
+    }
+
+
     // insert data into TABLE_STEP
     public long addSteps(int postId, String description, int stepOrder, String imagePath){
         SQLiteDatabase db = this.getWritableDatabase();
@@ -117,6 +146,8 @@ public class DbHandler extends SQLiteOpenHelper {
         db.update(TABLE_POSTS,contentValues,"ID = ?",new String[]{String.valueOf(post.getId())});
         // update steps
         db.delete(TABLE_STEPS,"POST_ID = ?",new String[]{String.valueOf(post.getId())});
+        // update ingredients
+        db.delete(TABLE_INGREDIENTS,"POST_ID = ?",new String[]{String.valueOf(post.getId())});
         return true;
     }
 
@@ -148,7 +179,6 @@ public class DbHandler extends SQLiteOpenHelper {
                 ArrayList<Step> recipeStep = new ArrayList<>();
                 if(cursor1.moveToFirst()){
                     do{
-                        int postId = cursor1.getInt(2);
                         String stepDesc = cursor1.getString(1);
                         int stepOrder = cursor1.getInt(3);
                         String stepImgPath = cursor1.getString(4);
@@ -156,8 +186,21 @@ public class DbHandler extends SQLiteOpenHelper {
                     }while(cursor1.moveToNext());
                 }
                 cursor1.close();
+                // get ingredients
+                String query2 = "SELECT * FROM " + TABLE_INGREDIENTS + " WHERE POST_ID = " + id;
+                Cursor cursor2 = db.rawQuery(query2,null);
+                ArrayList<RecipeIngredient> recipeIngredients = new ArrayList<>();
+                if(cursor2.moveToFirst()){
+                    do{
+                        String ingredientName = cursor2.getString(2);
+                        String ingredientQuantity = cursor2.getString(3);
+                        String ingredientUnit = cursor2.getString(4);
+                        recipeIngredients.add(new RecipeIngredient(ingredientName,ingredientQuantity,ingredientUnit));
+                    }while(cursor2.moveToNext());
+                }
+                cursor2.close();
                 //    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
-                Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, null, recipeStep);
+                Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, recipeIngredients, recipeStep);
                 recipe.setId(id);
                 arrayList.add(recipe);
             }while(cursor.moveToNext());
@@ -193,8 +236,21 @@ public class DbHandler extends SQLiteOpenHelper {
                 }while(cursor1.moveToNext());
             }
             cursor1.close();
+            // get ingredients
+            String query2 = "SELECT * FROM " + TABLE_INGREDIENTS + " WHERE POST_ID = " + id;
+            Cursor cursor2 = db.rawQuery(query2,null);
+            ArrayList<RecipeIngredient> recipeIngredients = new ArrayList<>();
+            if(cursor2.moveToFirst()){
+                do{
+                    String ingredientName = cursor2.getString(2);
+                    String ingredientQuantity = cursor2.getString(3);
+                    String ingredientUnit = cursor2.getString(4);
+                    recipeIngredients.add(new RecipeIngredient(ingredientName,ingredientQuantity,ingredientUnit));
+                }while(cursor2.moveToNext());
+            }
+            cursor2.close();
             //    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
-            Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, null, recipeStep);
+            Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, recipeIngredients, recipeStep);
             recipe.setId(id);
             cursor.close();
             return recipe;

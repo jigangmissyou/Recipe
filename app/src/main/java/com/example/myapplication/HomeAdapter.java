@@ -56,15 +56,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         Recipe recipe = recipes.get(position);
         ArrayList<Step> stepList = recipe.getRecipeSteps();
         // find the last step as the image
-        Step lastStep = stepList.get(stepList.size()-1);
-        String imagePath = lastStep.getImagePath();
-        if (imagePath == null) {
-            // Set a default image or handle the case when the file doesn't exist
+        if(stepList.size() == 0){
             holder.images.setImageResource(R.drawable.baseline_panorama_24);
-        }else{
-            // log the image path
-            // Load the image from the file path
-            holder.images.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+        }else {
+            Step lastStep = stepList.get(stepList.size() - 1);
+            String imagePath = lastStep.getImagePath();
+            if (imagePath == null) {
+                // Set a default image or handle the case when the file doesn't exist
+                holder.images.setImageResource(R.drawable.baseline_panorama_24);
+            } else {
+                // log the image path
+                // Load the image from the file path
+                holder.images.setImageBitmap(BitmapFactory.decodeFile(imagePath));
+            }
         }
         holder.bind(recipe);
         String title = recipe.getTitle();

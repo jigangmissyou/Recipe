@@ -41,6 +41,10 @@ public class RecipeFormActivity extends AppCompatActivity {
     private List<EditText> ingredientEditTexts;
     private List<StepItem> stepItems;
 
+    private List<RecipeIngredient> ingredients;
+
+    private ArrayList<RecipeIngredient> ingredientArrayList;
+
     private Map<String, Integer> stepIndexMap = new HashMap<>();
     private Map<String, String> stepImagePathMap = new HashMap<>();
 
@@ -63,6 +67,7 @@ public class RecipeFormActivity extends AppCompatActivity {
 
         ingredientEditTexts = new ArrayList<>();
         stepItems = new ArrayList<>();
+        ingredients = new ArrayList<>();
 
         addIngredientBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,19 +93,15 @@ public class RecipeFormActivity extends AppCompatActivity {
         // 获取传递的数据
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey("recipeId")) {
-            // 获取数据
             recipeId = extras.getInt("recipeId");
-            // 根据id获取数据
             DbHandler dbHandler = new DbHandler(this);
             Recipe recipe2 = dbHandler.getRecipe(recipeId);
+            ingredientArrayList = recipe2.getIngredients();
             recipeSteps = recipe2.getRecipeSteps();
-
             recipeTitle = recipe2.getTitle();
             recipeDescription = recipe2.getDescription();
             recipeIngredients = extras.getStringArrayList("ingredients");
 //            recipeSteps = extras.getParcelableArrayList("steps");
-
-            // 进行数据回显
             populateFormWithData();
         }
     }
@@ -113,9 +114,49 @@ public class RecipeFormActivity extends AppCompatActivity {
         );
         EditText editText = new EditText(context);
         editText.setLayoutParams(layoutParams);
-        editText.setHint("Enter ingredient");
+        editText.setHint("Enter ingredient name");
         ingredientsLayout.addView(editText);
         ingredientEditTexts.add(editText);
+        // create ingredient quantity edit text
+        EditText quantityEditText = new EditText(context);
+        quantityEditText.setLayoutParams(layoutParams);
+        quantityEditText.setHint("Enter ingredient quantity");
+        ingredientsLayout.addView(quantityEditText);
+        ingredientEditTexts.add(quantityEditText);
+        // create ingredient unit edit text
+        EditText unitEditText = new EditText(context);
+        unitEditText.setLayoutParams(layoutParams);
+        unitEditText.setHint("Enter ingredient unit");
+        ingredientsLayout.addView(unitEditText);
+        ingredientEditTexts.add(unitEditText);
+        LinearLayout horizontalLayout = new LinearLayout(context);
+        horizontalLayout.setLayoutParams(layoutParams);
+        horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+        ingredientsLayout.addView(horizontalLayout);
+        ingredients.add(new RecipeIngredient(editText.getText().toString(), quantityEditText.getText().toString(), unitEditText.getText().toString()));
+        // create remove ingredient button
+        Button removeIngredientBtn = new Button(context);
+        removeIngredientBtn.setLayoutParams(layoutParams);
+        removeIngredientBtn.setText("Remove ingredient");
+        removeIngredientBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeIngredientEditText(editText, quantityEditText, unitEditText, removeIngredientBtn);
+            }
+        });
+        ingredientsLayout.addView(removeIngredientBtn);
+        ingredients.add(new RecipeIngredient(editText.getText().toString(), quantityEditText.getText().toString(), unitEditText.getText().toString()));
+
+    }
+
+    private void removeIngredientEditText(EditText editText, EditText quantityEditText, EditText unitEditText, Button removeIngredientBtn) {
+        ingredientsLayout.removeView(editText);
+        ingredientsLayout.removeView(quantityEditText);
+        ingredientsLayout.removeView(unitEditText);
+        ingredientsLayout.removeView(removeIngredientBtn);
+        ingredientEditTexts.remove(editText);
+        ingredientEditTexts.remove(quantityEditText);
+        ingredientEditTexts.remove(unitEditText);
     }
 
     private void addStepItem() {
@@ -126,27 +167,21 @@ public class RecipeFormActivity extends AppCompatActivity {
         EditText stepEditText = stepItemLayout.findViewById(R.id.step_edit_text);
         ImageView imageView = stepItemLayout.findViewById(R.id.step_image_view);
         Button removeStepBtn = stepItemLayout.findViewById(R.id.remove_step_button);
-
         removeStepBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 removeStepItem(stepItemLayout);
             }
         });
-
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 uploadImage(v);
             }
         });
-
         imageView.setTag("step_image_" + stepItems.size());
         stepIndexMap.put(imageView.getTag().toString(), stepItems.size());
-
-
         stepItems.add(new StepItem(stepEditText, imageView));
-
         stepsLayout.addView(stepItemLayout);
     }
 
@@ -155,10 +190,8 @@ public class RecipeFormActivity extends AppCompatActivity {
         StepItem stepItem = findStepItem(stepItemLayout);
         if (stepItem != null) {
             stepItems.remove(stepItem);
-
         }
     }
-
     private StepItem findStepItem(View stepItemLayout) {
         for (StepItem stepItem : stepItems) {
             if (stepItem.getLayout() == stepItemLayout) {
@@ -167,23 +200,12 @@ public class RecipeFormActivity extends AppCompatActivity {
         }
         return null;
     }
-
     private void submitRecipe() {
         String title = ((EditText) findViewById(R.id.title_edit_text)).getText().toString();
         String description = ((EditText) findViewById(R.id.description_edit_text)).getText().toString();
-
-        List<String> ingredients = new ArrayList<>();
-        for (EditText editText : ingredientEditTexts) {
-            String ingredient = editText.getText().toString();
-            if (!TextUtils.isEmpty(ingredient)) {
-                ingredients.add(ingredient);
-            }
-        }
-
         List<Step> steps = new ArrayList<>();
         for (StepItem stepItem : stepItems) {
             String stepText = stepItem.getEditText().getText().toString();
-
             Bitmap stepImage = stepItem.getImage();
             // get image path
             String imagePath = stepImagePathMap.get(stepItem.getImageView().getTag().toString());
@@ -209,6 +231,21 @@ public class RecipeFormActivity extends AppCompatActivity {
                     // log the last id
                     Log.d("lastId2", String.valueOf(id));
                 }
+                for (int i =0; i<ingredientEditTexts.size(); i+=3) {
+                    String ingredientName = ingredientEditTexts.get(i).getText().toString();
+                    //log the ingredient name
+                    Log.d("ingredientName", ingredientName);
+                    String ingredientQuantity = ingredientEditTexts.get(i+1).getText().toString();
+                    //log the ingredient quantity
+                    Log.d("ingredientQuantity", ingredientQuantity);
+                    String ingredientUnit = ingredientEditTexts.get(i+2).getText().toString();
+                    //log the ingredient unit
+                    Log.d("ingredientUnit", ingredientUnit);
+                    long id = dbHandler.addIngredients(lastId, ingredientName, ingredientQuantity, ingredientUnit);
+                    // log id
+                    Log.d("lastId4", String.valueOf(id));
+                }
+
             }
         } else if (recipeId > 0) {
             post.setId(recipeId);
@@ -220,6 +257,24 @@ public class RecipeFormActivity extends AppCompatActivity {
                 // log the last id
                 Log.d("lastId3", String.valueOf(id));
             }
+            // log ingredientEditTexts size
+            Log.d("ingredientEditTexts", String.valueOf(ingredientEditTexts.size()));
+            // insert ingredients from edit text
+            for (int i =0; i<ingredientEditTexts.size(); i+=3) {
+                String ingredientName = ingredientEditTexts.get(i).getText().toString();
+                //log the ingredient name
+                Log.d("ingredientName", ingredientName);
+                String ingredientQuantity = ingredientEditTexts.get(i+1).getText().toString();
+                //log the ingredient quantity
+                Log.d("ingredientQuantity", ingredientQuantity);
+                String ingredientUnit = ingredientEditTexts.get(i+2).getText().toString();
+                //log the ingredient unit
+                Log.d("ingredientUnit", ingredientUnit);
+                long id = dbHandler.addIngredients(recipeId, ingredientName, ingredientQuantity, ingredientUnit);
+                // log id
+                Log.d("lastId4", String.valueOf(id));
+            }
+
         }
         // redirect to home page
         Intent intent = new Intent(this, HomeActivity.class);
@@ -255,9 +310,7 @@ public class RecipeFormActivity extends AppCompatActivity {
         }
     }
 
-
     private String saveBitmapToLocal(Bitmap bitmap) {
-        // 创建图片文件
         File imagesDir = new File(getFilesDir(), "images");
         if (!imagesDir.exists()) {
             imagesDir.mkdirs();
@@ -266,7 +319,6 @@ public class RecipeFormActivity extends AppCompatActivity {
         File imageFile = new File(imagesDir, fileName);
 
         try {
-            // 将Bitmap保存到文件
             FileOutputStream outputStream = new FileOutputStream(imageFile);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
             outputStream.flush();
@@ -298,13 +350,12 @@ public class RecipeFormActivity extends AppCompatActivity {
     private void populateFormWithData() {
         EditText titleEditText = findViewById(R.id.title_edit_text);
         EditText descriptionEditText = findViewById(R.id.description_edit_text);
-
         titleEditText.setText(recipeTitle);
         descriptionEditText.setText(recipeDescription);
-
-        if (recipeIngredients != null && !recipeIngredients.isEmpty()) {
-            for (String ingredient : recipeIngredients) {
-                addIngredientEditTextWithData(ingredient);
+        // add ingredients
+        if (ingredientArrayList != null && !ingredientArrayList.isEmpty()) {
+            for (RecipeIngredient recipeIngredient : ingredientArrayList) {
+                addIngredientEditTextWithData(recipeIngredient);
             }
         }
 
@@ -315,18 +366,59 @@ public class RecipeFormActivity extends AppCompatActivity {
         }
     }
 
-    private void addIngredientEditTextWithData(String ingredientText) {
+    private void addIngredientEditTextWithData(RecipeIngredient recipeIngredient) {
         Context context = getApplicationContext();
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
-        EditText editText = new EditText(context);
-        editText.setLayoutParams(layoutParams);
-        editText.setHint("Enter ingredient");
-        editText.setText(ingredientText);
-        ingredientsLayout.addView(editText);
-        ingredientEditTexts.add(editText);
+
+        // Create and configure ingredient name EditText
+        EditText nameEditText = new EditText(context);
+        nameEditText.setLayoutParams(layoutParams);
+        nameEditText.setHint("Enter ingredient name");
+        nameEditText.setText(recipeIngredient.getIngredientName());
+        ingredientsLayout.addView(nameEditText);
+        ingredientEditTexts.add(nameEditText);
+
+        // Create and configure ingredient quantity EditText
+        EditText quantityEditText = new EditText(context);
+        quantityEditText.setLayoutParams(layoutParams);
+        quantityEditText.setHint("Enter ingredient quantity");
+        quantityEditText.setText(recipeIngredient.getIngredientQuantity());
+        ingredientsLayout.addView(quantityEditText);
+        ingredientEditTexts.add(quantityEditText);
+
+        // Create and configure ingredient unit EditText
+        EditText unitEditText = new EditText(context);
+        unitEditText.setLayoutParams(layoutParams);
+        unitEditText.setHint("Enter ingredient unit");
+        unitEditText.setText(recipeIngredient.getIngredientUnit());
+        ingredientsLayout.addView(unitEditText);
+        ingredientEditTexts.add(unitEditText);
+
+        LinearLayout horizontalLayout = new LinearLayout(context);
+        horizontalLayout.setLayoutParams(layoutParams);
+        horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+        ingredientsLayout.addView(horizontalLayout);
+
+        // Create and configure remove ingredient button
+        Button removeIngredientBtn = new Button(context);
+        removeIngredientBtn.setLayoutParams(layoutParams);
+        removeIngredientBtn.setText("Remove ingredient");
+        removeIngredientBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeIngredientEditText(nameEditText, quantityEditText, unitEditText, removeIngredientBtn);
+            }
+        });
+        ingredientsLayout.addView(removeIngredientBtn);
+
+        // Create and add RecipeIngredient object to the list
+        ingredients.add(new RecipeIngredient(recipeIngredient.getIngredientName(), recipeIngredient.getIngredientQuantity(), recipeIngredient.getIngredientUnit()));
+    }
+
+    private void removeIngredientItem(LinearLayout ingredientItemLayout) {
     }
 
     private void addStepItemWithData(Step step) {

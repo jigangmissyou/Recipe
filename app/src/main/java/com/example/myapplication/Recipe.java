@@ -16,13 +16,13 @@ public class Recipe implements Serializable {
     private String mNickName;
 
     // define field ingredients
-    private String[] mIngredients;
+    private ArrayList<RecipeIngredient> mIngredients;
 
     private ArrayList<Step> mRecipeSteps;
 
 //    private List
 
-    public Recipe(int imageResId, String title, String description, int thumbUp, int collected, String nickName, String[] ingredients, ArrayList<Step> recipeSteps){
+    public Recipe(int imageResId, String title, String description, int thumbUp, int collected, String nickName, ArrayList<RecipeIngredient> ingredients, ArrayList<Step> recipeSteps){
         mImageResId = imageResId;
         mTitle = title;
         mDescription = description;
@@ -57,7 +57,7 @@ public class Recipe implements Serializable {
         return mNickName;
     }
 
-    public String[] getIngredients() {
+    public ArrayList<RecipeIngredient> getIngredients() {
         return mIngredients;
     }
 

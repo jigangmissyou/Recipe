@@ -40,6 +40,16 @@
                             android:layout_marginTop="16dp"
                             android:layout_marginStart="16dp"
                             android:layout_marginEnd="16dp" />
+                        <!-- Recipe Description -->
+                        <TextView
+                            android:id="@+id/recipe_desc"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Recipe Description"
+                            android:textSize="16sp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp" />
 
                         <!-- Recipe Author -->
                         <TextView
