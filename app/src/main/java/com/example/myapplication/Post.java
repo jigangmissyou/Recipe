@@ -71,5 +71,24 @@ public class Post {
     }
 
 
+    public void setTitle(String test_title) {
+        this.title = test_title;
+    }
+
+    public void setDescription(String test_description) {
+        this.description = test_description;
+    }
+
+    public void setAuthor(String test_author) {
+        this.author = test_author;
+    }
+
+    public void setCategory(int i) {
+        this.category = i;
+    }
+
+    public void setImagePath(String s) {
+        this.imagePath = s;
+    }
 }
 

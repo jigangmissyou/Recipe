@@ -54,6 +54,7 @@ public class RecipeFormActivity extends AppCompatActivity {
     private List<Step> recipeSteps;
     private int recipeId = -1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +107,7 @@ public class RecipeFormActivity extends AppCompatActivity {
         }
     }
 
-    private void addIngredientEditText() {
+    public void addIngredientEditText() {
         Context context = getApplicationContext();
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -159,7 +160,7 @@ public class RecipeFormActivity extends AppCompatActivity {
         ingredientEditTexts.remove(unitEditText);
     }
 
-    private void addStepItem() {
+    public void addStepItem() {
         Context context = getApplicationContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         LinearLayout stepItemLayout = (LinearLayout) inflater.inflate(R.layout.step_item, stepsLayout, false);
@@ -200,7 +201,7 @@ public class RecipeFormActivity extends AppCompatActivity {
         }
         return null;
     }
-    private void submitRecipe() {
+    public void submitRecipe() {
         String title = ((EditText) findViewById(R.id.title_edit_text)).getText().toString();
         String description = ((EditText) findViewById(R.id.description_edit_text)).getText().toString();
         List<Step> steps = new ArrayList<>();

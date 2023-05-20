@@ -14,8 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText usernameEditText, passwordEditText;
-    private Button loginButton;
+    public EditText usernameEditText;
+    public EditText passwordEditText;
+    public Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

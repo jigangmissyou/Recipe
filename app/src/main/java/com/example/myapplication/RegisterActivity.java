@@ -17,6 +17,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     EditText usernameEditText, emailEditText, passwordEditText;
     Button registerButton;
+    private boolean isRegistrationSuccessful;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +109,7 @@ public class RegisterActivity extends AppCompatActivity {
                 DbHandler dbHandler = new DbHandler(RegisterActivity.this);
                 boolean ret = dbHandler.register(username,password,email);
                 if (ret) {
+                    isRegistrationSuccessful = true;
                     Toast.makeText(RegisterActivity.this, "Registration successful!", Toast.LENGTH_SHORT).show();
                     // redirect to the login activity
                     Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -117,4 +120,9 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+    public boolean isRegistrationSuccessful() {
+        return isRegistrationSuccessful;
+    }
+
 }

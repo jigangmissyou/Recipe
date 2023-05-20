@@ -280,8 +280,10 @@ public class DbHandler extends SQLiteOpenHelper {
         String query = "SELECT * FROM " + TABLE_USERS + " WHERE USERNAME = '" + username + "' AND PASSWORD = '" + password + "'";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.getCount() > 0) {
+            cursor.close();
             return true;
         } else {
+            cursor.close();
             return false;
         }
     }
