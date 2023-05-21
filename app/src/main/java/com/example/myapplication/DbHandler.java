@@ -23,7 +23,7 @@ public class DbHandler extends SQLiteOpenHelper {
     public static final String TABLE_STEPS = "my_steps";
 
     public static final String TABLE_INGREDIENTS = "my_ingredients";
-    private static final String TABLE_USERS = "my_user";
+    public static final String TABLE_USERS = "my_user";
 
     // define table columns
     public DbHandler(Context context) {
