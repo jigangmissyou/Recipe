@@ -205,17 +205,59 @@ public class RecipeFormActivity extends AppCompatActivity {
         String title = ((EditText) findViewById(R.id.title_edit_text)).getText().toString();
         String description = ((EditText) findViewById(R.id.description_edit_text)).getText().toString();
         List<Step> steps = new ArrayList<>();
-        for (StepItem stepItem : stepItems) {
-            String stepText = stepItem.getEditText().getText().toString();
-            Bitmap stepImage = stepItem.getImage();
-            // get image path
-            String imagePath = stepImagePathMap.get(stepItem.getImageView().getTag().toString());
-            // imagePath is null, means no image is selected
-            if (!TextUtils.isEmpty(stepText)) {
-                Step step = new Step(stepText, imagePath, 0);
+        // recipeSteps is initialized in onCreate method
+//        Log.d("recipeSteps", recipeSteps.toString());
+//        Log.d("recipeSteps size", String.valueOf(recipeSteps.size()));
+        if (recipeSteps != null && recipeSteps.size() > 0) {
+            for (int i = 0; i < recipeSteps.size(); i++) {
+                Step step = recipeSteps.get(i);
+                //log step
+                Log.d("stepInfo", step.toString());
+                StepItem stepItem = stepItems.get(i);
+                // log stepItem
+                Log.d("stepItem", stepItem.toString());
+                String stepText = stepItem.getEditText().getText().toString();
+                // log stepText
+                Log.d("stepText", stepText);
+                // get image path
+                String imagePath = step.getImagePath();
+                // log imagePath
+                if(imagePath == null) {
+                    Log.d("imagePath", "imagePath is null");
+                } else {
+                    Log.d("imagePath", imagePath);
+                }
+                step.setDescription(stepText);
+                step.setImagePath(imagePath);
                 steps.add(step);
             }
+        } else {
+            for (StepItem stepItem : stepItems) {
+                String stepText = stepItem.getEditText().getText().toString();
+                Bitmap stepImage = stepItem.getImage();
+                // get image path
+                String imagePath = stepImagePathMap.get(stepItem.getImageView().getTag().toString());
+                // imagePath is null, means no image is selected
+                if (!TextUtils.isEmpty(stepText)) {
+                    Step step = new Step(stepText, imagePath, 0);
+                    steps.add(step);
+                }
+            }
         }
+
+//        for (StepItem stepItem : stepItems) {
+//            String stepText = stepItem.getEditText().getText().toString();
+//            Bitmap stepImage = stepItem.getImage();
+//            // get image path
+//            String imagePath = stepImagePathMap.get(stepItem.getImageView().getTag().toString());
+//            //log image path
+//            Log.d("check imagePath", imagePath);
+//            // imagePath is null, means no image is selected
+//            if (!TextUtils.isEmpty(stepText)) {
+//                Step step = new Step(stepText, imagePath, 0);
+//                steps.add(step);
+//            }
+//        }
 
         String username = getSharedPreferences("login_pref", MODE_PRIVATE).getString("username", "");
         Post post = new Post(title, description, username, "", 1);
@@ -254,12 +296,12 @@ public class RecipeFormActivity extends AppCompatActivity {
             Step[] stepArray = steps.toArray(new Step[0]);
             for(int i=0; i<stepArray.length; i++) {
                 Step step = stepArray[i];
-                long id = dbHandler.addSteps(recipeId, step.getDescription(), i, stepImagePathMap.get("step_image_" + i));
+                long id = dbHandler.addSteps(recipeId, step.getDescription(), i, recipeSteps.get(i).getImagePath());
                 // log the last id
                 Log.d("lastId3", String.valueOf(id));
             }
             // log ingredientEditTexts size
-            Log.d("ingredientEditTexts", String.valueOf(ingredientEditTexts.size()));
+            Log.d("f", String.valueOf(ingredientEditTexts.size()));
             // insert ingredients from edit text
             for (int i =0; i<ingredientEditTexts.size(); i+=3) {
                 String ingredientName = ingredientEditTexts.get(i).getText().toString();
@@ -301,6 +343,20 @@ public class RecipeFormActivity extends AppCompatActivity {
 
                     StepItem stepItem = stepItems.get(stepIndex);
                     stepItem.setImagePath(imagePath);
+                    //if recipeSteps is not null, means it is edit recipe page
+                    if(recipeSteps != null) {
+                        // get step id
+                        if(stepIndex < recipeSteps.size()) {
+                            Step stepData = recipeSteps.get(stepIndex);
+                            stepData.setImagePath(imagePath);
+                        }else {
+                            // add new step
+                            Step stepData = new Step("", imagePath, 0);
+                            recipeSteps.add(stepData);
+                        }
+//                        Step stepData = recipeSteps.get(stepIndex);
+//                        stepData.setImagePath(imagePath);
+                    }
                     // set image path to tag
                     stepImagePathMap.put(stepItem.getImageView().getTag().toString(), imagePath);
                     stepItem.getImageView().setImageBitmap(bitmap);
