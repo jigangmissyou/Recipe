@@ -47,6 +47,7 @@ public class StepItem implements Serializable {
     }
 
     public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public String getTag() {

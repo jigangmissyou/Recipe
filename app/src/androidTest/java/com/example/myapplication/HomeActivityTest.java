@@ -26,7 +26,10 @@ public class HomeActivityTest {
         // scroll to the third item in the horizontal gallery
         Espresso.onView(ViewMatchers.withId(R.id.galleryRecyclerView))
                 .perform(RecyclerViewActions.scrollToPosition(2));
+    }
 
+    @Test
+    public void testGalleryClick() {
         // click on the first item in the horizontal gallery
         Espresso.onView(ViewMatchers.withId(R.id.galleryRecyclerView))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
@@ -38,20 +41,24 @@ public class HomeActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.content_item_layout))
                 .perform(RecyclerViewActions.scrollToPosition(2));
 
+    }
+
+    @Test
+    public void testContentListClick() {
         // click on the first item in the vertical content list
         Espresso.onView(ViewMatchers.withId(R.id.content_item_layout))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, ViewActions.click()));
     }
 
     @Test
-    public void testBottomNavigation() {
+    public void testBottomNavigationToSecond() {
         // click on the third menu item in the bottom navigation bar
         Espresso.onView(ViewMatchers.withId(R.id.menu_item_2)).perform(ViewActions.click());
+    }
 
-        // return to the home screen
-        Espresso.pressBack();
-
-        // click on the fourth menu item in the bottom navigation bar
-        Espresso.onView(ViewMatchers.withId(R.id.menu_item_4)).perform(ViewActions.click());
+    @Test
+    public void testBottomNavigationBack() {
+        // click on the back button in the bottom navigation bar
+        Espresso.onView(ViewMatchers.withId(R.id.menu_item_1)).perform(ViewActions.click());
     }
 }
