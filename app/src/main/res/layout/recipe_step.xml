@@ -16,7 +16,6 @@
             android:id="@+id/step1_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Step 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas auctor, velit eget hendrerit tincidunt, sapien risus volutpat nisl, eget congue risus libero a enim. Sed volutpat, libero quis consectetur pharetra, nisi massa tristique urna, eget varius tellus magna a lectus. Integer tempor odio quis mi pretium, id finibus neque malesuada. Aenean non ultricies eros. "
             android:textSize="16sp"
             />
 </LinearLayout>
