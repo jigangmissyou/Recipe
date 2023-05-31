@@ -22,9 +22,10 @@ public class CategoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<Category> categories = new ArrayList<>();
-        categories.add(new Category("Parent Category 1", Arrays.asList("Subcategory 1", "Subcategory 2", "Subcategory 3")));
-        categories.add(new Category("Parent Category 2", Arrays.asList("Subcategory 4", "Subcategory 5")));
-        categories.add(new Category("Parent Category 3", Arrays.asList("Subcategory 6", "Subcategory 7", "Subcategory 8", "Subcategory 9")));
+        categories.add(new Category("Breakfast", Arrays.asList("Eggs", "Pancakes", "Toast")));
+        categories.add(new Category("Lunch", Arrays.asList("Salad", "Sandwich", "Soup")));
+        categories.add(new Category("Dinner", Arrays.asList("Chicken", "Beef", "Fish")));
+        categories.add(new Category("Dessert", Arrays.asList("Cake", "Ice Cream", "Cookies")));
 
         CategoryAdapter adapter = new CategoryAdapter(categories);
         recyclerView.setAdapter(adapter);

@@ -1,86 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/dashboard_layout"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Top Tab Panel -->
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
+    <RelativeLayout
+        android:id="@+id/dashboard_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:tabIndicatorColor="@color/black"
-        app:tabIndicatorHeight="3dp">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_recommend"
-            android:layout_width="wrap_content"
+        <!-- Top Tab Panel -->
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tab_recommend"/>
+            android:background="@color/white"
+            app:tabIndicatorColor="@color/black"
+            app:tabIndicatorHeight="3dp">
 
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/tab_category"
-            android:layout_width="wrap_content"
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_recommend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_recommend" />
+
+            <com.google.android.material.tabs.TabItem
+                android:id="@+id/tab_category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_category" />
+
+        </com.google.android.material.tabs.TabLayout>
+
+        <!-- Search Area -->
+        <LinearLayout
+            android:id="@+id/search_area"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/tab_category"/>
+            android:layout_below="@id/tab_layout"
+            android:padding="16dp"
+            android:orientation="horizontal">
 
-    </com.google.android.material.tabs.TabLayout>
+            <SearchView
+                android:id="@+id/search_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
+        </LinearLayout>
 
-
-    <!-- Search Area -->
-    <LinearLayout
-        android:id="@+id/search_area"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tab_layout"
-        android:padding="16dp"
-        android:orientation="horizontal">
-        <SearchView
-            android:id="@+id/search_view"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_area"
+            android:orientation="vertical">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/galleryRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/search_area" />
 
-        <!--        <EditText-->
-<!--            android:id="@+id/search_edit_text"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_weight="1"-->
-<!--            android:hint="@string/search_hint"-->
-<!--            android:background="@null"/>-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/content_item_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/galleryRecyclerView" />
+        </LinearLayout>
 
-<!--        <ImageView-->
-<!--            android:id="@+id/search_icon"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@android:drawable/ic_menu_search"/>-->
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/search_area"
-        android:orientation="vertical">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/galleryRecyclerView"
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/search_area"
-            />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/content_item_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/galleryRecyclerView"
-            />
-    </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            app:menu="@menu/bottom_navigation" />
+    </RelativeLayout>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:menu="@menu/bottom_navigation" />
-</RelativeLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

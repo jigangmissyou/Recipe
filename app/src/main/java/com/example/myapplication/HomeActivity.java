@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -25,6 +26,8 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements GalleryAdapter.OnItemClickListener {
     private String username = null;
+    private SwipeRefreshLayout swipeRefreshLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,26 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
         showBottomNav();
         layoutTab();
         search();
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // 执行刷新操作，例如重新加载数据或更新视图
+                refreshData();
+            }
+        });
+    }
+
+    // 刷新数据方法的示例
+    private void refreshData() {
+        // 执行刷新操作，例如重新加载数据或更新视图
+
+        // 示例：重新加载图片库和内容列表
+        showGallery();
+        showContentList();
+
+        // 停止刷新动画
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
