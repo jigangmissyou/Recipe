@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,15 +20,16 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
         this.categories = categories;
     }
 
+    @NonNull
     @Override
-    public CategoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.activity_category_item, parent, false);
         return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Category category = categories.get(position);
         holder.bind(category);
     }
@@ -38,7 +41,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView parentCategoryTitle;
-        private TextView subCategoryTitle;
+        private ClickableTextView subCategoryTitle;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -48,7 +51,21 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         public void bind(Category category) {
             parentCategoryTitle.setText(category.getParentCategory());
-            subCategoryTitle.setText(TextUtils.join(", ", category.getSubCategories()));
+            subCategoryTitle.setTextWithClickableSubCategories(TextUtils.join(", ", category.getSubCategories()));
+            subCategoryTitle.setOnSubCategoryClickListener(new ClickableTextView.OnSubCategoryClickListener() {
+                @Override
+                public void onSubCategoryClick(String subCategory) {
+                    // log subcategory, for debugging
+                    Log.d("subcateogryxx", "onSubCategoryClick: " + subCategory + " clicked");
+
+                    // 处理子分类点击事件，跳转到对应分类下的菜谱列表
+                    Intent intent = new Intent(itemView.getContext(), HomeActivity.class);
+                    intent.putExtra("category", category.getParentCategory());
+                    intent.putExtra("subcategory", subCategory);
+                    itemView.getContext().startActivity(intent);
+                }
+            });
         }
     }
+
 }

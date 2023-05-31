@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <com.example.myapplication.ClickableTextView
             android:id="@+id/parent_category_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,14 +19,19 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <TextView
+        <com.example.myapplication.ClickableTextView
             android:id="@+id/subcategory_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Subcategory"
             android:textColor="#808080"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:attr/selectableItemBackground" />
+
+
 
     </LinearLayout>
 
