@@ -13,6 +13,10 @@ import java.util.List;
 public class IngredientAdapter extends RecyclerView.Adapter<IngredientAdapter.IngredientViewHolder> {
 
     private List<RecipeIngredient> ingredients;
+    public void setData(List<RecipeIngredient> ingredients) {
+        this.ingredients = ingredients;
+        notifyDataSetChanged();
+    }
 
     public IngredientAdapter(List<RecipeIngredient> ingredients) {
         this.ingredients = ingredients;

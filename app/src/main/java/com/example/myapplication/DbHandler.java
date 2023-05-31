@@ -209,6 +209,61 @@ public class DbHandler extends SQLiteOpenHelper {
         return arrayList;
     }
 
+
+    public ArrayList<Recipe> getLikeRecipe(String keyWord){
+        ArrayList<Recipe> arrayList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        // keyWord 如果是空的，就是查询所有
+        if(keyWord.equals("") || keyWord == null){
+            return getAllRecipe("ID");
+        }
+        String query = "SELECT * FROM " + TABLE_POSTS + " WHERE TITLE LIKE '%" + keyWord + "%' OR DESCRIPTION LIKE '%" + keyWord + "%'";
+        Cursor cursor = db.rawQuery(query,null);
+        if(cursor.moveToFirst()){
+            do{
+                int id = cursor.getInt(0);
+                String title = cursor.getString(1);
+                String description = cursor.getString(2);
+                String author = cursor.getString(4);
+                int category = cursor.getInt(5);
+                int thumbUpCounts = cursor.getInt(6);
+                int collectedCounts = cursor.getInt(7);
+                String imagePath = cursor.getString(8);
+                String query1 = "SELECT * FROM " + TABLE_STEPS + " WHERE POST_ID = " + id;
+                Cursor cursor1 = db.rawQuery(query1,null);
+                ArrayList<Step> recipeStep = new ArrayList<>();
+                if(cursor1.moveToFirst()){
+                    do{
+                        String stepDesc = cursor1.getString(1);
+                        int stepOrder = cursor1.getInt(3);
+                        String stepImgPath = cursor1.getString(4);
+                        recipeStep.add(new Step(stepDesc,stepImgPath, stepOrder));
+                    }while(cursor1.moveToNext());
+                }
+                cursor1.close();
+                // get ingredients
+                String query2 = "SELECT * FROM " + TABLE_INGREDIENTS + " WHERE POST_ID = " + id;
+                Cursor cursor2 = db.rawQuery(query2,null);
+                ArrayList<RecipeIngredient> recipeIngredients = new ArrayList<>();
+                if(cursor2.moveToFirst()){
+                    do{
+                        String ingredientName = cursor2.getString(2);
+                        String ingredientQuantity = cursor2.getString(3);
+                        String ingredientUnit = cursor2.getString(4);
+                        recipeIngredients.add(new RecipeIngredient(ingredientName,ingredientQuantity,ingredientUnit));
+                    }while(cursor2.moveToNext());
+                }
+                cursor2.close();
+                //    public Recipe(int imageResId, String title, String description, boolean thumbUp, boolean collected, String nickName, String[] ingredients, ArrayList<RecipeStep> recipeSteps){
+                Recipe recipe = new Recipe(1, title, description, thumbUpCounts,collectedCounts, author, recipeIngredients, recipeStep);
+                recipe.setId(id);
+                arrayList.add(recipe);
+            }while(cursor.moveToNext());
+        }
+        cursor.close();
+        return arrayList;
+    }
+
     //get one recipe
     public Recipe getRecipe(int id){
         SQLiteDatabase db = this.getReadableDatabase();

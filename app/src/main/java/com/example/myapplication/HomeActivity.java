@@ -212,12 +212,20 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
             public boolean onQueryTextSubmit(String query) {
                 // TODO WILL BE IMPLEMENTED IN THE FUTURE
                 Toast.makeText(HomeActivity.this, "Search: submit " + query, Toast.LENGTH_SHORT).show();
+                // 查詢數據庫
+                DbHandler dbHandler = new DbHandler(HomeActivity.this);
+                ArrayList<Recipe> recipes = dbHandler.getLikeRecipe(query);
+                HomeAdapter adapter2 = new HomeAdapter(HomeActivity.this, recipes, username);
+                RecyclerView contentRecyclerView = findViewById(R.id.content_item_layout);
+                RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(HomeActivity.this);
+                contentRecyclerView.setLayoutManager(layoutManager2);
+                contentRecyclerView.setAdapter(adapter2);
                 return true;
             }
             @Override
             public boolean onQueryTextChange(String newText) {
                 // TODO WILL BE IMPLEMENTED IN THE FUTURE
-                Toast.makeText(HomeActivity.this, "Search: change" + newText, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HomeActivity.this, "Search: change" + newText, Toast.LENGTH_SHORT).show();
                 return true;
             }
         });

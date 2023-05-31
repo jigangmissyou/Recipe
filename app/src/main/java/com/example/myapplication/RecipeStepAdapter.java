@@ -6,9 +6,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
@@ -21,21 +25,36 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final int TYPE_TITLE = 3;
     private static final int TYPE_CONTENT = 4;
     private static final int TYPE_AUTHOR = 5;
-    private static final int TYPE_INGREDIENT = 6;
-    private static final int TYPE_STEP = 7;
-
-
+    private static final int TYPE_INGREDIENT_INTRO = 6;
+    private static final int TYPE_INGREDIENT = 7;
+    private static final int TYPE_STEP_INTRO = 8;
+    private static final int TYPE_STEP = 9;
     private String title;
     private String content;
 
     private  String author;
 
-    private ArrayList<RecipeIngredient> recipeIngredients;
+    private static ArrayList<RecipeIngredient> recipeIngredients;
     private List<Step> steps;
+
+    private OnShareClickListener shareClickListener;
+
+    // ...
+
+    public interface OnShareClickListener {
+        void onShareClick(String title, String author);
+    }
+
+    public void setOnShareClickListener(OnShareClickListener listener) {
+        // log listener
+        Log.d("RecipeStepAdapter xxxxxxxxxxxxxxxxxxxxxx ", "setOnShareClickListener: " + listener);
+        this.shareClickListener = listener;
+    }
 
     public RecipeStepAdapter(String title, String content, String author, ArrayList<RecipeIngredient> recipeIngredients, List<Step> steps) {
         this.title = title;
         this.content = content;
+        this.author = author;
         this.recipeIngredients = recipeIngredients;
         this.steps = steps;
     }
@@ -52,10 +71,12 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             return TYPE_CONTENT;
         } else if (position == 4) {
             return TYPE_AUTHOR;
-        } else if (position == 5 + steps.size()) {
+        } else if (position == 5) {
+            return TYPE_INGREDIENT_INTRO;
+        }else if (position == 6) {
             return TYPE_INGREDIENT;
-        } else if (position == 6 + steps.size()){
-            return TYPE_STEP;
+        }else if (position == 7) {
+            return TYPE_STEP_INTRO;
         } else {
             return TYPE_STEP;
         }
@@ -76,18 +97,24 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case TYPE_IMAGE:
                 itemView = inflater.inflate(R.layout.detail_image, parent, false);
                 return new ImageViewHolder(itemView);
-            case TYPE_STEP:
-                itemView = inflater.inflate(R.layout.recipe_step, parent, false);
-                return new RecipeStepViewHolder(itemView);
             case TYPE_SHARE:
                 itemView = inflater.inflate(R.layout.detail_toolbar, parent, false);
                 return new ShareViewHolder(itemView);
             case TYPE_AUTHOR:
                 itemView = inflater.inflate(R.layout.detail_author, parent, false);
                 return new AuthorViewHolder(itemView);
+            case TYPE_INGREDIENT_INTRO:
+                itemView = inflater.inflate(R.layout.detail_ingredient_intro, parent, false);
+                return new IngredientIntroViewHolder(itemView);
             case TYPE_INGREDIENT:
-                itemView = inflater.inflate(R.layout.ingredient_item, parent, false);
+                itemView = inflater.inflate(R.layout.detail_ingredient_item, parent, false);
                 return new IngredientViewHolder(itemView);
+            case TYPE_STEP_INTRO:
+                itemView = inflater.inflate(R.layout.detail_step_intro, parent, false);
+                return new StepIntroViewHolder(itemView);
+            case TYPE_STEP:
+                itemView = inflater.inflate(R.layout.recipe_step, parent, false);
+                return new RecipeStepViewHolder(itemView);
             default:
                 throw new IllegalArgumentException("Invalid view type");
         }
@@ -105,31 +132,51 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case TYPE_CONTENT:
                 ((ContentViewHolder) holder).contentTextView.setText(content);
                 break;
-            case TYPE_STEP:
-                int stepPosition = position - 6 - steps.size() - 1;
-                if (stepPosition >= 0 && stepPosition < steps.size()) {
-                    stepView(stepPosition, (RecipeStepViewHolder) holder);
-                }
-                break;
 
-//                stepView(position, (RecipeStepViewHolder) holder);
-//                break;
             case TYPE_IMAGE:
                 // Handle image layout
                 break;
-            case TYPE_SHARE:
-//                ((ShareViewHolder) holder).shareImageView.setImageResource(R.drawable.ic_menu_share);
-                // Handle share layout
-                break;
+
             case TYPE_AUTHOR:
                 // Handle author layout
                 ((AuthorViewHolder) holder).contentTextView.setText("Author: " + author);
                 break;
+            case TYPE_INGREDIENT_INTRO:
+                ((IngredientIntroViewHolder) holder).contentTextView.setText("Ingredients:");
+                break;
             case TYPE_INGREDIENT:
-                int ingredientPosition = position - 7 - steps.size() - 1;
-                if (ingredientPosition >= 0 && ingredientPosition < recipeIngredients.size()) {
-                    ingredientView(ingredientPosition, (IngredientViewHolder) holder);
+               String ingredientText = "";
+                for (int i = 0; i < recipeIngredients.size(); i++) {
+                    RecipeIngredient recipeIngredient = recipeIngredients.get(i);
+                    String ingredientName = recipeIngredient.getIngredientName();
+                    String ingredientQuantity = recipeIngredient.getIngredientQuantity();
+                    String ingredientUnit = recipeIngredient.getIngredientUnit();
+                    ingredientText += ingredientName + " " + ingredientQuantity + ingredientUnit;
+                    if (i != recipeIngredients.size() - 1) {
+                        ingredientText += "\n";
+                    }
                 }
+                ((IngredientViewHolder) holder).contentTextView.setText(ingredientText);
+                break;
+            case TYPE_SHARE:
+                ShareViewHolder shareViewHolder = (ShareViewHolder) holder;
+                shareViewHolder.shareImageView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(v.getContext(), "Share clicked", Toast.LENGTH_SHORT).show();
+                        // log shareClickListener
+
+                        if (shareClickListener != null) {
+                            shareClickListener.onShareClick(title, author);
+                        }
+                    }
+                });
+                break;
+            case TYPE_STEP_INTRO:
+                ((StepIntroViewHolder) holder).contentTextView.setText("Steps:");
+                break;
+            case TYPE_STEP:
+                stepView(position-8, (RecipeStepViewHolder) holder);
                 break;
             default:
                 throw new IllegalArgumentException("Invalid view type");
@@ -138,6 +185,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void stepView(int position, RecipeStepViewHolder holder) {
+//        position = steps.size() -1;
         Step step = steps.get(position);
         String imagePath = step.getImagePath();
         if (imagePath == null) {
@@ -155,23 +203,15 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         holder.stepTextView.setText(description);
     }
 
-    public void ingredientView(int position, IngredientViewHolder holder) {
-        RecipeIngredient recipeIngredient = recipeIngredients.get(position);
-        String ingredientName = recipeIngredient.getIngredientName();
-        String ingredientQuantity = recipeIngredient.getIngredientQuantity();
-        String ingredientUnit = recipeIngredient.getIngredientUnit();
-        holder.ingredientNameTextView.setText(ingredientName);
-        holder.ingredientQuantityTextView.setText(ingredientQuantity + " " + ingredientUnit);
-    }
 
     @Override
     public int getItemCount() {
-        Log.d("record steps.size + ingredients.size", "getItemCount: "+steps.size() + recipeIngredients.size());
-        Log.d("record steps.size", "getItemCount: "+steps.size());
-        Log.d("record ingredients.size", "getItemCount: "+recipeIngredients.size());
+//        Log.d("record steps.size + ingredients.size", "getItemCount: "+steps.size() + recipeIngredients.size());
+//        Log.d("record steps.size", "getItemCount: "+steps.size());
+//        Log.d("record ingredients.size", "getItemCount: "+recipeIngredients.size());
 
 
-        return 5 + steps.size() + recipeIngredients.size();
+        return 8 + steps.size() ;
     }
 
     static class TitleViewHolder extends RecyclerView.ViewHolder {
@@ -216,18 +256,6 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 //        }
     }
 
-    static class IngredientViewHolder extends RecyclerView.ViewHolder {
-        TextView ingredientNameTextView;
-        TextView ingredientQuantityTextView;
-        TextView ingredientUnitTextView;
-        IngredientViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ingredientNameTextView = itemView.findViewById(R.id.ingredient_name);
-            ingredientQuantityTextView = itemView.findViewById(R.id.ingredient_quantity);
-            ingredientUnitTextView = itemView.findViewById(R.id.ingredient_unit);
-        }
-    }
-
     static class ShareViewHolder extends RecyclerView.ViewHolder {
         ImageView shareImageView;
 
@@ -245,6 +273,28 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         }
     }
 
+    static class IngredientViewHolder extends RecyclerView.ViewHolder {
+        TextView contentTextView;
+        IngredientViewHolder(@NonNull View itemView) {
+            super(itemView);
+            contentTextView = itemView.findViewById(R.id.recipe_item_name);
+        }
+    }
 
+    static class IngredientIntroViewHolder extends RecyclerView.ViewHolder {
+        TextView contentTextView;
+        IngredientIntroViewHolder(@NonNull View itemView) {
+            super(itemView);
+            contentTextView = itemView.findViewById(R.id.ingredient_intro);
+        }
+    }
+
+    static class StepIntroViewHolder extends RecyclerView.ViewHolder {
+        TextView contentTextView;
+        StepIntroViewHolder(@NonNull View itemView) {
+            super(itemView);
+            contentTextView = itemView.findViewById(R.id.step_intro);
+        }
+    }
 
 }
