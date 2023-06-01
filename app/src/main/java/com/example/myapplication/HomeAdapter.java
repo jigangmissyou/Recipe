@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -90,6 +91,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         holder.thumb_up_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //判斷是否登錄
+                if(username == null){
+                    Toast.makeText(context, "Please login first!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    context.startActivity(intent);
+                    return;
+                }
                 Toast.makeText(context, "You have liked this recipe!", Toast.LENGTH_SHORT).show();
                 DbHandler dbHandler = new DbHandler(context);
                 dbHandler.updatePostCounts(recipe.getId(), "thumbUp");
@@ -101,6 +109,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder>{
         holder.collect_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //判斷是否登錄
+                if(username == null){
+                    Toast.makeText(context, "Please login first!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    context.startActivity(intent);
+                    return;
+                }
                 Toast.makeText(context, "You have collected this recipe!", Toast.LENGTH_SHORT).show();
                 DbHandler dbHandler = new DbHandler(context);
                 dbHandler.updatePostCounts(recipe.getId(), "collected");
