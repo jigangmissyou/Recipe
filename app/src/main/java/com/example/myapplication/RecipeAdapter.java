@@ -18,11 +18,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         this.stepItems = stepItems;
     }
     public void uploadImage(int position) {
-
-        // 处理图片上传逻辑，例如选择图片并设置到对应的StepItem对象中
-        // ...
-
-        // 更新RecyclerView的数据
         notifyDataSetChanged();
     }
 
@@ -32,8 +27,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.step_item, parent, false);
         final ViewHolder viewHolder = new ViewHolder(itemView);
-
-        // 设置点击事件监听器
         viewHolder.stepImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

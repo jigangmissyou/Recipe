@@ -213,7 +213,6 @@ public class DbHandler extends SQLiteOpenHelper {
     public ArrayList<Recipe> getLikeRecipe(String keyWord){
         ArrayList<Recipe> arrayList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        // keyWord 如果是空的，就是查询所有
         if(keyWord.equals("") || keyWord == null){
             return getAllRecipe("ID");
         }

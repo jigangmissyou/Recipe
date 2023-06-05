@@ -164,9 +164,9 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
                             startActivity(intent);
                         }
                         return true;
-                    case R.id.menu_item_3:
-                        Toast.makeText(HomeActivity.this, "Please wait to release :)", Toast.LENGTH_SHORT).show();
-                        return true;
+//                    case R.id.menu_item_3:
+//                        Toast.makeText(HomeActivity.this, "Please wait to release :)", Toast.LENGTH_SHORT).show();
+//                        return true;
                     case R.id.menu_item_4:
                         checkLoginStatus();
                         if (username == null){
@@ -197,11 +197,11 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
                 switch (tab.getPosition()) {
                     case 0:
                         // Handle click on first tab item
-                        Toast.makeText(HomeActivity.this, "Tab 1", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(HomeActivity.this, "Tab 1", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
                         // Handle click on second tab item
-                        Toast.makeText(HomeActivity.this, "Tab 2", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(HomeActivity.this, "Tab 2", Toast.LENGTH_SHORT).show();
                         // navigate to category activity
                         Intent intent = new Intent(HomeActivity.this, CategoryActivity.class);
                         startActivity(intent);
@@ -233,9 +233,6 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // TODO WILL BE IMPLEMENTED IN THE FUTURE
-                Toast.makeText(HomeActivity.this, "Search: submit " + query, Toast.LENGTH_SHORT).show();
-                // 查詢數據庫
                 DbHandler dbHandler = new DbHandler(HomeActivity.this);
                 ArrayList<Recipe> recipes = dbHandler.getLikeRecipe(query);
                 HomeAdapter adapter2 = new HomeAdapter(HomeActivity.this, recipes, username);
