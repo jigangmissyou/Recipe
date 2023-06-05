@@ -23,12 +23,6 @@ We welcome contributions from everyone! If you would like to contribute to this 
 
 This project is licensed under the [MIT License](LICENSE).
 
-## Acknowledgments
-
-We would like to thank the following resources for their inspiration and contributions to this project:
-
-- [Name of recipe website or cookbook]
-- [Name of tutorial or guide]
 
 ## Contact
 
