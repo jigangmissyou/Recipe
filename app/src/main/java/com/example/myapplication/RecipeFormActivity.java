@@ -12,10 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +27,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,11 +58,40 @@ public class RecipeFormActivity extends AppCompatActivity {
     private List<Step> recipeSteps;
     private int recipeId = -1;
 
+    private Spinner parentCategorySpinner;
+    private Spinner subCategorySpinner;
+    private Button submitButton;
+
+    private String selectedParentCategory;
+    private String selectedSubCategory;
+    private Map<String, List<String>> categoryMap;
+    private List<String> parentCategories;
+    private List<String> subCategories;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_form);
+        parentCategorySpinner = findViewById(R.id.parent_category_spinner);
+        subCategorySpinner = findViewById(R.id.sub_category_spinner);
+        submitButton = findViewById(R.id.submit_button);
+        initCategoryData();
+        ArrayAdapter<String> parentAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, parentCategories);
+        parentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        parentCategorySpinner.setAdapter(parentAdapter);
+        parentCategorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedParentCategory = parentCategories.get(position);
+                updateSubCategorySpinner(selectedParentCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         ingredientsLayout = findViewById(R.id.ingredients_layout);
         stepsLayout = findViewById(R.id.steps_layout);
@@ -100,11 +133,52 @@ public class RecipeFormActivity extends AppCompatActivity {
             ingredientArrayList = recipe2.getIngredients();
             recipeSteps = recipe2.getRecipeSteps();
             recipeTitle = recipe2.getTitle();
+            selectedSubCategory = recipe2.getCategory();
+            selectedParentCategory = getParentCategoryBySubCategory(selectedSubCategory);
             recipeDescription = recipe2.getDescription();
             recipeIngredients = extras.getStringArrayList("ingredients");
-//            recipeSteps = extras.getParcelableArrayList("steps");
             populateFormWithData();
         }
+    }
+
+    private void initCategoryData() {
+        categoryMap = new HashMap<>();
+        parentCategories = new ArrayList<>();
+        subCategories = new ArrayList<>();
+        List<Category> categories = new ArrayList<>();
+        categories.add(new Category("Breakfast", Arrays.asList("Eggs", "Pancakes", "Toast")));
+        categories.add(new Category("Lunch", Arrays.asList("Salad", "Sandwich", "Soup")));
+        categories.add(new Category("Dinner", Arrays.asList("Chicken", "Beef", "Fish")));
+        categories.add(new Category("Dessert", Arrays.asList("Cake", "Ice Cream", "Cookies")));
+        for (Category category : categories) {
+            parentCategories.add(category.getParentCategory());
+            categoryMap.put(category.getParentCategory(), category.getSubCategories());
+        }
+    }
+
+    private String getParentCategoryBySubCategory(String subCategory) {
+        for (Map.Entry<String, List<String>> entry : categoryMap.entrySet()) {
+            String parentCategory = entry.getKey();
+            List<String> subCategories = entry.getValue();
+
+            if (subCategories.contains(subCategory)) {
+                return parentCategory;
+            }
+        }
+
+        return null;
+    }
+
+
+    private void updateSubCategorySpinner(String parentCategory) {
+        // 根据选择的父类别更新子类别Spinner的数据
+        subCategories.clear();
+        subCategories.addAll(categoryMap.get(parentCategory));
+
+        // 设置子类别Spinner的适配器
+        ArrayAdapter<String> subAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, subCategories);
+        subAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        subCategorySpinner.setAdapter(subAdapter);
     }
 
     public void addIngredientEditText() {
@@ -202,6 +276,13 @@ public class RecipeFormActivity extends AppCompatActivity {
         return null;
     }
     public void submitRecipe() {
+        String selectedParentCategory = parentCategorySpinner.getSelectedItem().toString();
+        String selectedSubCategory = subCategorySpinner.getSelectedItem().toString();
+        Toast.makeText(this, selectedParentCategory + " > " + selectedSubCategory, Toast.LENGTH_SHORT).show();
+
+        // log selected category
+        Log.d("selected category", selectedParentCategory + " > " + selectedSubCategory);
+
         String title = ((EditText) findViewById(R.id.title_edit_text)).getText().toString();
         String description = ((EditText) findViewById(R.id.description_edit_text)).getText().toString();
         // title cannot be empty
@@ -255,22 +336,8 @@ public class RecipeFormActivity extends AppCompatActivity {
             }
         }
 
-//        for (StepItem stepItem : stepItems) {
-//            String stepText = stepItem.getEditText().getText().toString();
-//            Bitmap stepImage = stepItem.getImage();
-//            // get image path
-//            String imagePath = stepImagePathMap.get(stepItem.getImageView().getTag().toString());
-//            //log image path
-//            Log.d("check imagePath", imagePath);
-//            // imagePath is null, means no image is selected
-//            if (!TextUtils.isEmpty(stepText)) {
-//                Step step = new Step(stepText, imagePath, 0);
-//                steps.add(step);
-//            }
-//        }
-
         String username = getSharedPreferences("login_pref", MODE_PRIVATE).getString("username", "");
-        Post post = new Post(title, description, username, "", 1);
+        Post post = new Post(title, description, username, "", selectedSubCategory);
         // add posts to sqlite
         DbHandler dbHandler = new DbHandler(this);
         if(recipeId == -1) {
@@ -419,6 +486,15 @@ public class RecipeFormActivity extends AppCompatActivity {
         EditText descriptionEditText = findViewById(R.id.description_edit_text);
         titleEditText.setText(recipeTitle);
         descriptionEditText.setText(recipeDescription);
+        // 设置父类别Spinner的选中项
+        int parentCategoryIndex = parentCategories.indexOf(selectedParentCategory);
+        parentCategorySpinner.setSelection(parentCategoryIndex);
+        // 更新子类别Spinner的数据
+        updateSubCategorySpinner(selectedParentCategory);
+        // 设置子类别Spinner的选中项
+        int subCategoryIndex = subCategories.indexOf(selectedSubCategory);
+//        Toast.makeText(this, String.valueOf(subCategoryIndex), Toast.LENGTH_SHORT).show();
+        subCategorySpinner.setSelection(subCategoryIndex);
         // add ingredients
         if (ingredientArrayList != null && !ingredientArrayList.isEmpty()) {
             for (RecipeIngredient recipeIngredient : ingredientArrayList) {

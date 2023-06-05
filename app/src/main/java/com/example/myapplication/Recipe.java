@@ -15,6 +15,8 @@ public class Recipe implements Serializable {
     private int mCollected;
     private String mNickName;
 
+    private String mCategory;
+
     // define field ingredients
     private ArrayList<RecipeIngredient> mIngredients;
 
@@ -22,7 +24,7 @@ public class Recipe implements Serializable {
 
 //    private List
 
-    public Recipe(int imageResId, String title, String description, int thumbUp, int collected, String nickName, ArrayList<RecipeIngredient> ingredients, ArrayList<Step> recipeSteps){
+    public Recipe(int imageResId, String title, String description, int thumbUp, int collected, String nickName, ArrayList<RecipeIngredient> ingredients, ArrayList<Step> recipeSteps, String category){
         mImageResId = imageResId;
         mTitle = title;
         mDescription = description;
@@ -31,6 +33,7 @@ public class Recipe implements Serializable {
         mNickName = nickName;
         mIngredients = ingredients;
         mRecipeSteps = recipeSteps;
+        mCategory = category;
     }
 
     public void setId(int id) {
@@ -55,6 +58,14 @@ public class Recipe implements Serializable {
 
     public String getNickName() {
         return mNickName;
+    }
+
+    public String getCategory() {
+        return mCategory;
+    }
+
+    public void setCategory(String category) {
+        mCategory = category;
     }
 
     public ArrayList<RecipeIngredient> getIngredients() {

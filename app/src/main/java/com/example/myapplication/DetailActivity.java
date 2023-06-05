@@ -1,15 +1,7 @@
 package com.example.myapplication;
-
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +20,7 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepAdapt
         stepList.setLayoutManager(new LinearLayoutManager(this));
         Log.d("RecipeStepAdapter", "Recipe Steps: " + recipe.getRecipeSteps().toString());
         RecipeStepAdapter adapter = new RecipeStepAdapter(recipe.getTitle(),recipe.getDescription(), recipe.getNickName(), ingredientList, recipe.getRecipeSteps());
-        stepList.setAdapter(new RecipeStepAdapter(recipe.getTitle(),recipe.getDescription(), recipe.getNickName(), ingredientList, recipe.getRecipeSteps()));
+        stepList.setAdapter(new RecipeStepAdapter(recipe.getTitle(),recipe.getDescription()+"\n"+"Category: "+recipe.getCategory(), recipe.getNickName(), ingredientList, recipe.getRecipeSteps()));
         adapter.setOnShareClickListener(this);
     }
 

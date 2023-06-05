@@ -16,13 +16,14 @@ public class RecipeTest {
         int imageResId = 1;
         String title = "Test Recipe";
         String description = "This is a test recipe";
+        String category = "Bakery";
         int thumbUp = 10;
         int collected = 5;
         String nickName = "Test User";
         ArrayList<RecipeIngredient> ingredients = new ArrayList<>();
         ArrayList<Step> recipeSteps = new ArrayList<>();
 
-        recipe = new Recipe(imageResId, title, description, thumbUp, collected, nickName, ingredients, recipeSteps);
+        recipe = new Recipe(imageResId, title, description, thumbUp, collected, nickName, ingredients, recipeSteps, category);
     }
 
     @Test

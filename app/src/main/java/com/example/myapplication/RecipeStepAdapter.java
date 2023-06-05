@@ -172,9 +172,6 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 shareViewHolder.shareImageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(v.getContext(), "Share clicked", Toast.LENGTH_SHORT).show();
-                        // log shareClickListener
-
                         if (shareClickListener != null) {
                             shareClickListener.onShareClick(title, author);
                         }

@@ -15,7 +15,7 @@ public class PostTest {
         String description = "Test Description";
         String author = "Test Author";
         String imagePath = "test/image/path";
-        int category = 1;
+        String category = "Bakery";
         post = new Post(title, description, author, imagePath, category);
     }
 

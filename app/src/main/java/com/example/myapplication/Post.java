@@ -1,7 +1,5 @@
 package com.example.myapplication;
 
-import java.util.List;
-
 public class Post {
 
     private int id;
@@ -11,13 +9,13 @@ public class Post {
 
     private String imagePath;
 
-    private int category;
+    private String category;
 
     private int thumbUpCounts;
 
     private int collectedCounts;
 
-    public Post(String title, String description, String author, String imagePath, int category) {
+    public Post(String title, String description, String author, String imagePath, String category) {
         this.title = title;
         this.description = description;
         this.author = author;
@@ -54,7 +52,7 @@ public class Post {
         return imagePath;
     }
 
-    public int getCategory() {
+    public String getCategory() {
         return category;
     }
 
@@ -83,7 +81,7 @@ public class Post {
         this.author = test_author;
     }
 
-    public void setCategory(int i) {
+    public void setCategory(String i) {
         this.category = i;
     }
 

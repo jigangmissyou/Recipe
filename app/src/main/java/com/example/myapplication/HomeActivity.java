@@ -26,6 +26,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity implements GalleryAdapter.OnItemClickListener {
     private String username = null;
+    private String subcategory = null;
     private SwipeRefreshLayout swipeRefreshLayout;
 
 
@@ -33,6 +34,9 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+        // receive intent from category activity
+        Intent intent = getIntent();
+        subcategory = intent.getStringExtra("subcategory");
         checkLoginStatus();
         showGallery();
         showContentList();
@@ -49,15 +53,10 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
         });
     }
 
-    // 刷新数据方法的示例
     private void refreshData() {
-        // 执行刷新操作，例如重新加载数据或更新视图
-
-        // 示例：重新加载图片库和内容列表
+        subcategory = null;
         showGallery();
         showContentList();
-
-        // 停止刷新动画
         swipeRefreshLayout.setRefreshing(false);
     }
 
@@ -87,7 +86,13 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
      */
     public void showContentList() {
         DbHandler dbHandler = new DbHandler(this);
-        ArrayList<Recipe> recipes = dbHandler.getAllRecipe(" ID ");
+        ArrayList<Recipe> recipes;
+        if(subcategory != null){
+            recipes = dbHandler.getRecipeByCategory(subcategory);
+        }else{
+            recipes = dbHandler.getAllRecipe(" ID ");
+        }
+//        ArrayList<Recipe> recipes = dbHandler.getAllRecipe(" ID ");
         SharedPreferences sharedPref = getSharedPreferences("login_pref", Context.MODE_PRIVATE);
         username = sharedPref.getString("username", null);
         Log.d("nickname Username4", "Username: " + username);
@@ -196,8 +201,6 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        // Handle click on first tab item
-//                        Toast.makeText(HomeActivity.this, "Tab 1", Toast.LENGTH_SHORT).show();
                         break;
                     case 1:
                         // Handle click on second tab item
@@ -249,5 +252,19 @@ public class HomeActivity extends AppCompatActivity implements GalleryAdapter.On
                 return true;
             }
         });
+
+
+    }
+
+    public void getRecipeByCategory(String category) {
+        DbHandler dbHandler = new DbHandler(HomeActivity.this);
+        ArrayList<Recipe> recipes = dbHandler.getRecipeByCategory(category);
+        HomeAdapter adapter2 = new HomeAdapter(HomeActivity.this, recipes, username);
+        RecyclerView contentRecyclerView = findViewById(R.id.content_item_layout);
+        RecyclerView.LayoutManager layoutManager2 = new LinearLayoutManager(HomeActivity.this);
+        contentRecyclerView.setLayoutManager(layoutManager2);
+        contentRecyclerView.setAdapter(adapter2);
+        // update content list
+        adapter2.notifyDataSetChanged();
     }
 }
