@@ -11,8 +11,7 @@ import com.example.myapplication.StepItem;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder> {
-    // 其他代码...
-    private List<StepItem> stepItems;  // 声明stepItems列表
+    private List<StepItem> stepItems;  //
 
     public RecipeAdapter(List<StepItem> stepItems) {
         this.stepItems = stepItems;
@@ -30,7 +29,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         viewHolder.stepImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // 调用上传图片的方法
                 uploadImage(viewHolder.getAdapterPosition());
             }
         });
@@ -57,6 +55,5 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
         }
     }
 
-    // 其他代码...
 }
 

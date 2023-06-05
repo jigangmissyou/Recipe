@@ -3,6 +3,7 @@ package com.example.myapplication;
 import android.content.Context;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
@@ -10,6 +11,8 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatTextView;
+
+import java.util.List;
 
 public class ClickableTextView extends AppCompatTextView {
     private OnSubCategoryClickListener onSubCategoryClickListener;
@@ -39,19 +42,45 @@ public class ClickableTextView extends AppCompatTextView {
 
     public interface OnSubCategoryClickListener {
         void onSubCategoryClick(String subCategory);
+
+        void onSubCategoryClick(String subCategory, int position);
     }
 
-    public void setTextWithClickableSubCategories(String text) {
-        SpannableString spannableString = new SpannableString(text);
+//    public void setTextWithClickableSubCategories(String text) {
+//        SpannableString spannableString = new SpannableString(text);
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(@NonNull View widget) {
+//                if (onSubCategoryClickListener != null) {
+//                    onSubCategoryClickListener.onSubCategoryClick(getText().toString());
+//                }
+//            }
+//        };
+//        spannableString.setSpan(clickableSpan, 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//        setText(spannableString);
+//    }
+public void setTextWithClickableSubCategories(List<String> subCategories) {
+    SpannableString spannableString = new SpannableString(TextUtils.join(", ", subCategories));
+
+    for (int i = 0; i < subCategories.size(); i++) {
+        final String subCategory = subCategories.get(i);
         ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
             public void onClick(@NonNull View widget) {
                 if (onSubCategoryClickListener != null) {
-                    onSubCategoryClickListener.onSubCategoryClick(getText().toString());
+                    onSubCategoryClickListener.onSubCategoryClick(subCategory);
                 }
             }
         };
-        spannableString.setSpan(clickableSpan, 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        setText(spannableString);
+
+        // 存储子类别位置信息
+        spannableString.setSpan(clickableSpan, spannableString.toString().indexOf(subCategory),
+                spannableString.toString().indexOf(subCategory) + subCategory.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
     }
+
+    setText(spannableString);
+}
+
+
 }

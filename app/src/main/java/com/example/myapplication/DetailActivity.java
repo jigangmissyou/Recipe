@@ -34,7 +34,6 @@ public class DetailActivity extends AppCompatActivity implements RecipeStepAdapt
 
     // share recipe
     public void onShareClick(String title, String nickName) {
-        // 处理分享逻辑
         String shareText = "Check out this recipe: " + title + " by " + nickName;
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");

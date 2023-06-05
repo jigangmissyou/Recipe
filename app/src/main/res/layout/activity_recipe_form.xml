@@ -18,6 +18,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Description" />
+    <Spinner
+        android:id="@+id/parent_category_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Parent Category" />
+    <Spinner
+        android:id="@+id/sub_category_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Sub Category" />
+
 
     <Button
         android:id="@+id/add_ingredient_button"

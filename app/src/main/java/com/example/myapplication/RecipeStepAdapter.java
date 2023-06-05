@@ -95,6 +95,7 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 itemView = inflater.inflate(R.layout.detail_content, parent, false);
                 return new ContentViewHolder(itemView);
             case TYPE_IMAGE:
+                // do not show image
                 itemView = inflater.inflate(R.layout.detail_image, parent, false);
                 return new ImageViewHolder(itemView);
             case TYPE_SHARE:
@@ -132,9 +133,17 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case TYPE_CONTENT:
                 ((ContentViewHolder) holder).contentTextView.setText(content);
                 break;
-
             case TYPE_IMAGE:
                 // Handle image layout
+                // show steps' last image
+                String imagePath = steps.get(steps.size() - 1).getImagePath();
+                if (imagePath != null) {
+                    File imgFile = new File(imagePath);
+                    if (imgFile.exists()) {
+                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        ((ImageViewHolder) holder).imageView.setImageBitmap(myBitmap);
+                    }
+                }
                 break;
 
             case TYPE_AUTHOR:
@@ -200,7 +209,9 @@ public class RecipeStepAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             }
         }
         String description = step.getDescription();
-        holder.stepTextView.setText(description);
+        // set step number with description
+        holder.stepTextView.setText("Step " + (position + 1) + ": " + description);
+//        holder.stepTextView.setText(description);
     }
 
 

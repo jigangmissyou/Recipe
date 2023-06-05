@@ -204,6 +204,16 @@ public class RecipeFormActivity extends AppCompatActivity {
     public void submitRecipe() {
         String title = ((EditText) findViewById(R.id.title_edit_text)).getText().toString();
         String description = ((EditText) findViewById(R.id.description_edit_text)).getText().toString();
+        // title cannot be empty
+        if (title.isEmpty()) {
+            Toast.makeText(this, "Title cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        // description cannot be empty
+        if (description.isEmpty()) {
+            Toast.makeText(this, "Description cannot be empty", Toast.LENGTH_SHORT).show();
+            return;
+        }
         List<Step> steps = new ArrayList<>();
         // recipeSteps is initialized in onCreate method
 //        Log.d("recipeSteps", recipeSteps.toString());

@@ -1,7 +1,6 @@
 package com.example.myapplication;
 
 import android.content.Intent;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,21 +50,51 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
         public void bind(Category category) {
             parentCategoryTitle.setText(category.getParentCategory());
-            subCategoryTitle.setTextWithClickableSubCategories(TextUtils.join(", ", category.getSubCategories()));
+            subCategoryTitle.setTextWithClickableSubCategories(category.getSubCategories());
             subCategoryTitle.setOnSubCategoryClickListener(new ClickableTextView.OnSubCategoryClickListener() {
+//                @Override
+//                public void onSubCategoryClick(String subCategory) {
+//                    // log subcategory, for debugging
+//                    Log.d("subcategory", "onSubCategoryClick: " + subCategory + " clicked");
+//
+//                    Intent intent = new Intent(itemView.getContext(), HomeActivity.class);
+//                    intent.putExtra("category", category.getParentCategory());
+//                    intent.putExtra("subcategory", subCategory);
+//                    itemView.getContext().startActivity(intent);
+//                }
+
                 @Override
                 public void onSubCategoryClick(String subCategory) {
                     // log subcategory, for debugging
-                    Log.d("subcateogryxx", "onSubCategoryClick: " + subCategory + " clicked");
+                    Log.d("subcategory", "onSubCategoryClick: " + subCategory + " clicked");
 
-                    // 处理子分类点击事件，跳转到对应分类下的菜谱列表
                     Intent intent = new Intent(itemView.getContext(), HomeActivity.class);
                     intent.putExtra("category", category.getParentCategory());
                     intent.putExtra("subcategory", subCategory);
                     itemView.getContext().startActivity(intent);
                 }
+
+//                @Override
+//                public void onSubCategoryClick(String subCategory, int position) {
+//
+//                }
+
+                @Override
+                public void onSubCategoryClick(String subCategory, int position) {
+                    // 通过位置信息确定点击的子类别
+                    String clickedSubCategory = category.getSubCategories().get(position);
+
+                    // log subcategory, for debugging
+                    Log.d("subcategory", "onSubCategoryClick: " + clickedSubCategory + " clicked");
+
+                    Intent intent = new Intent(itemView.getContext(), HomeActivity.class);
+                    intent.putExtra("category", category.getParentCategory());
+                    intent.putExtra("subcategory", clickedSubCategory);
+                    itemView.getContext().startActivity(intent);
+                }
             });
         }
+
     }
 
 }
