@@ -16,22 +16,18 @@ import java.util.List;
 
 public class ClickableTextView extends AppCompatTextView {
     private OnSubCategoryClickListener onSubCategoryClickListener;
-
     public ClickableTextView(Context context) {
         super(context);
         init();
     }
-
     public ClickableTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
-
     public ClickableTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
-
     private void init() {
         setMovementMethod(LinkMovementMethod.getInstance());
     }
@@ -42,23 +38,8 @@ public class ClickableTextView extends AppCompatTextView {
 
     public interface OnSubCategoryClickListener {
         void onSubCategoryClick(String subCategory);
-
         void onSubCategoryClick(String subCategory, int position);
     }
-
-//    public void setTextWithClickableSubCategories(String text) {
-//        SpannableString spannableString = new SpannableString(text);
-//        ClickableSpan clickableSpan = new ClickableSpan() {
-//            @Override
-//            public void onClick(@NonNull View widget) {
-//                if (onSubCategoryClickListener != null) {
-//                    onSubCategoryClickListener.onSubCategoryClick(getText().toString());
-//                }
-//            }
-//        };
-//        spannableString.setSpan(clickableSpan, 0, text.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//        setText(spannableString);
-//    }
 public void setTextWithClickableSubCategories(List<String> subCategories) {
     SpannableString spannableString = new SpannableString(TextUtils.join(", ", subCategories));
 
@@ -73,7 +54,6 @@ public void setTextWithClickableSubCategories(List<String> subCategories) {
             }
         };
 
-        // 存储子类别位置信息
         spannableString.setSpan(clickableSpan, spannableString.toString().indexOf(subCategory),
                 spannableString.toString().indexOf(subCategory) + subCategory.length(),
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

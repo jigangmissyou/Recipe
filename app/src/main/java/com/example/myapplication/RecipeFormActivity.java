@@ -278,11 +278,9 @@ public class RecipeFormActivity extends AppCompatActivity {
     public void submitRecipe() {
         String selectedParentCategory = parentCategorySpinner.getSelectedItem().toString();
         String selectedSubCategory = subCategorySpinner.getSelectedItem().toString();
-        Toast.makeText(this, selectedParentCategory + " > " + selectedSubCategory, Toast.LENGTH_SHORT).show();
-
+//        Toast.makeText(this, selectedParentCategory + " > " + selectedSubCategory, Toast.LENGTH_SHORT).show();
         // log selected category
         Log.d("selected category", selectedParentCategory + " > " + selectedSubCategory);
-
         String title = ((EditText) findViewById(R.id.title_edit_text)).getText().toString();
         String description = ((EditText) findViewById(R.id.description_edit_text)).getText().toString();
         // title cannot be empty

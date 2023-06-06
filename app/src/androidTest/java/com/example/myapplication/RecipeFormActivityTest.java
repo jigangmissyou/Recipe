@@ -27,11 +27,8 @@ public class RecipeFormActivityTest {
 
     @Test
     public void testAddIngredient() {
-        // Find and perform actions on views using Espresso
         Espresso.onView(ViewMatchers.withId(R.id.add_ingredient_button))
                 .perform(ViewActions.click());
-
-        // Check if the ingredient EditText is displayed
         Espresso.onView(ViewMatchers.withHint("Enter ingredient name"))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
@@ -46,7 +43,5 @@ public class RecipeFormActivityTest {
         Espresso.onView(ViewMatchers.withId(R.id.step_edit_text))
                 .check(ViewAssertions.matches(ViewMatchers.isDisplayed()));
     }
-
-    // Add more test cases for other scenarios
 
 }
